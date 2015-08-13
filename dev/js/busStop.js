@@ -19,6 +19,7 @@ var MenuView = Backbone.View.extend({
         zoom: 10
       };
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    geocoder = new google.maps.Geocoder();
   },
   createSearch: function(){
     if(!this.searchView){
@@ -236,6 +237,25 @@ var SearchView = Backbone.View.extend({
     this.$el.removeClass('active pad10');
     this.$el.parent().find('.clicked').removeClass('clicked');
     this.getWay();
+  },
+   codeAddress: function() {
+    var address = document.getElementById("address").value;
+    address += ' Lviv';
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        map.setCenter(results[0].geometry.location);
+       console.log(results[0].geometry.location)
+        var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location,
+
+        });
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+   
   }
 });
 var menuView = new MenuView();
+
