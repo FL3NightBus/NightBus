@@ -1,6 +1,7 @@
 $panel: #fdc300;
 $submenuDesktop: #3b6186;
 $submenu: #ffce43;
+$button: #728da8;
 html, body, #map {
 	height: 100%;
 }
@@ -170,6 +171,10 @@ html, body, #map {
 	}
 	.txt {
 		width: 320px;
+		
+	}
+	.btn {
+		background: $button; 
 	}
 	.button {
 		height: auto;
@@ -188,7 +193,7 @@ html, body, #map {
 		left: 100px;
 		top: 0;
 		width: 0;
-		opacity: 0.8;
+		opacity: 1;
 		background-color: $submenuDesktop;
 		-moz-transition: width 2s; /* Firefox 4 */
 		-webkit-transition: width 2s; /* Safari and Chrome */

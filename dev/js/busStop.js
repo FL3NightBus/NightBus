@@ -1,10 +1,41 @@
 var map;
+var ChatView = Backbone.View.extend({
+  template: _.template('<div class="find">' +
+                          '<p>SEARCH</p>' +
+                          '<div>' +
+                            '<label for="id">from</label>' +
+                            '<input type="text" id="from" name="from" class="txt" />' +
+                          '</div>' +
+                          /*'<div class="change">' +
+                            '<input type="button" value="change" id="change" name="change" class="btn btn-default" />' +
+                          '</div>' +*/
+                          '<div>' +
+                            '<label for="to">to</label>' +
+                            '<input type="text" id="to" name="to" class="txt" />' +
+                          '</div>' +
+                          '<div class="right">' +
+                            '<input type="button" id="clear" name="clear" class="btn btn-default" value="clear" />' +
+                            '<input type="button" id="seach" name="seach" class="btn btn-default" value="seach"  />' +
+                          '</div>' +
+                        '</div>' +
+                        '<div class="click">' +
+                          '<p>Where I am?<p>' +
+                          '<input type="button" id="here" name="here" class="btn btn-default" value="Here!">' +
+                          '<p>' +
+                            '<img src="img/alert.png"> You can doble click on two points to find your way:' +
+                            '<input type="button" id="start" name="start" class="dbl btn btn-default" value="start">' +
+                          '</p>' +
+                        '</div>'
+                        )
+});
 var MenuView = Backbone.View.extend({
   el: $('#nav'),
   events:{
-    'click .search': 'createSearch'
+    'click .search': 'createSearch',
+    'click .chat': 'createChat'
   },
   searchView: null,
+  chatView: null,
   initialize: function() {
     var that = this;
     google.maps.event.addDomListener(window, 'load', this.mapInitialize);
@@ -25,17 +56,36 @@ var MenuView = Backbone.View.extend({
     if(!this.searchView){
       this.searchView = new SearchView();
     };
-    this.renderSearch();
+    if(!this.$el.find('.search').hasClass('clicked')) {
+      this.render('.search');
+    }
   },
-  renderSearch: function() {
+  createChat: function(){
+    if(!this.searchView){
+      this.searchView = new SearchView();
+    };
+    if(!this.$el.find('.chat').hasClass('clicked')) {
+      this.render('.chat');
+    }
+  },
+  render: function(pageClass) {
     var that = this;
+    var time = 0;
+    var submenu = this.$el.parent().find('.submenu');
+    submenu.html('');
+    if(submenu.hasClass('active')){
+      submenu.removeClass('active pad10');
+      time = 2000;
+    };
     this.$el.find('.clicked').removeClass('clicked');
-    this.$el.find('.search').addClass('clicked');
-    this.$el.parent().find('.submenu').addClass('active');
+    this.$el.find(pageClass).addClass('clicked');
     setTimeout(function(){
-      that.$el.parent().find('.submenu').html(that.searchView.template).addClass('pad10');
-    }, 2000);
-  }
+      submenu.addClass('active');
+    }, time);
+    setTimeout(function(){
+      submenu.html(that.searchView.template).addClass('pad10');
+    }, time + 2000);
+  },
 });
 var SearchView = Backbone.View.extend({
   el: $('.submenu'),
