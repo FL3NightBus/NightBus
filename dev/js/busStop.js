@@ -40,27 +40,33 @@ var SearchView = Backbone.View.extend({
   el: $('.submenu'),
   events: {
     'click #ok': 'getWay',
-    'click .dbl': 'getPoints'
+    'click #start': 'getPoints'
   },
   template: _.template('<div class="find">' +
-                          '<p>Find Your way</p>' +
+                          '<p>SEARCH</p>' +
                           '<div>' +
                             '<label for="id">from</label>' +
                             '<input type="text" id="from" name="from" class="txt" />' +
-                            '<input type="button" value="here" id="here" name="here" class="btn btn-default" />' +
                           '</div>' +
-                          '<div class="change">' +
+                          /*'<div class="change">' +
                             '<input type="button" value="change" id="change" name="change" class="btn btn-default" />' +
-                          '</div>' +
+                          '</div>' +*/
                           '<div>' +
                             '<label for="to">to</label>' +
                             '<input type="text" id="to" name="to" class="txt" />' +
-                            '<input type="button" value="ok" id="ok" name="ok" class="btn btn-default"  />' +
+                          '</div>' +
+                          '<div class="right">' +
+                            '<input type="button" id="clear" name="clear" class="btn btn-default" value="clear" />' +
+                            '<input type="button" id="seach" name="seach" class="btn btn-default" value="seach"  />' +
                           '</div>' +
                         '</div>' +
                         '<div class="click">' +
-                          '<p>You might double click on two points to find Your way!<p>' +
-                          '<p>Only click here: <img src="img/alert.png" class="dbl"></p>' +
+                          '<p>Where I am?<p>' +
+                          '<input type="button" id="here" name="here" class="btn btn-default" value="Here!">' +
+                          '<p>' +
+                            '<img src="img/alert.png"> You can doble click on two points to find your way:' +
+                            '<input type="button" id="start" name="start" class="dbl btn btn-default" value="start">' +
+                          '</p>' +
                         '</div>'
                         ),
   busStopArray: [],
