@@ -1,9 +1,46 @@
 var map;
-var RouteView = Backbone.View.extend({
-  el: $('.page'),
+var MenuView = Backbone.View.extend({
+  el: $('#nav'),
+  events:{
+    'click .search': 'createSearch'
+  },
+  searchView: null,
+  initialize: function() {
+    var that = this;
+    google.maps.event.addDomListener(window, 'load', this.mapInitialize);
+  },
+  mapInitialize: function() {
+    var myLatlng = {
+        lat: 49.87141,
+        lng: 24.058568
+      },
+      mapOptions = {
+        center: myLatlng,
+        zoom: 10
+      };
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  },
+  createSearch: function(){
+    if(!this.searchView){
+      this.searchView = new SearchView();
+    };
+    this.renderSearch();
+  },
+  renderSearch: function() {
+    var that = this;
+    this.$el.find('.clicked').removeClass('clicked');
+    this.$el.find('.search').addClass('clicked');
+    this.$el.parent().find('.submenu').addClass('active');
+    setTimeout(function(){
+      that.$el.parent().find('.submenu').html(that.searchView.template).addClass('pad10');
+    }, 2000);
+  }
+});
+var SearchView = Backbone.View.extend({
+  el: $('.submenu'),
   events: {
-    'click .search': 'render',
     'click #ok': 'getWay',
+    'click .dbl': 'getPoints'
   },
   template: _.template('<div class="find">' +
                           '<p>Find Your way</p>' +
@@ -23,7 +60,7 @@ var RouteView = Backbone.View.extend({
                         '</div>' +
                         '<div class="click">' +
                           '<p>You might double click on two points to find Your way!<p>' +
-                          '<p>Only click here: <img src="img/alert.png"></p>' +
+                          '<p>Only click here: <img src="img/alert.png" class="dbl"></p>' +
                         '</div>'
                         ),
   busStopArray: [],
@@ -46,26 +83,7 @@ var RouteView = Backbone.View.extend({
       }
     });
   },
-  render: function() {
-    var that = this;
-    this.$el.find('.button').removeClass('clicked');
-    this.$el.find('.search').removeClass('search').addClass('clicked');
-    this.$el.find('.submenu').toggleClass('active');
-    setTimeout(function(){
-      that.$el.find('.submenu').html(that.template).css({'padding': '10px'});
-    }, 2000);
-  },
-  mapInitialize: function() {
-    var myLatlng = {
-        lat: 49.87141,
-        lng: 24.058568
-      },
-      mapOptions = {
-        center: myLatlng,
-        zoom: 10
-      };
-    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-  },
+  
   setBusStopArray: function(arrayOfCoordinates, that) {
     var busStopArray = [];
     arrayOfCoordinates.forEach(function(el1) {
@@ -92,13 +110,13 @@ var RouteView = Backbone.View.extend({
     });
     that.busStopArray = busStopArray;
   },
-  getNearestBusStop: function(position, radius) {
-    console.log('clicked');
-    var that = this,
-      nearlestBusStop,
-      busStopInRadius = [],
+  getBusStopArray: function(){
+    return this.busStopArray;
+  },
+  getNearestBusStop: function(position) {
+    var nearestBusStop,
       markers = [],
-      _radius = 0,
+      radius = 0,
       marker = new google.maps.Marker({
         position: position,
         map: map
@@ -106,41 +124,62 @@ var RouteView = Backbone.View.extend({
       circleOptions = {
         map: map,
         center: position,
-        radius: _radius,
-        visible: false
+        radius: radius,
+        visible: true
       },
-      circle = new google.maps.Circle(circleOptions);
-    that.busStopArray.forEach(function(el) {
+      busStopArray = this.getBusStopArray();
+      var circle = new google.maps.Circle(circleOptions);
+    busStopArray.forEach(function(el) {
       markers.push(new google.maps.Marker({
         position: el,
         map: map,
         visible: false
       }));
     });
-    //circle.setVisible(false);
-    while (!nearlestBusStop) {
+    while (!nearestBusStop) {
       markers.forEach(function(el, i) {
         if (circle.getBounds().contains(el.getPosition())) {
-          nearlestBusStop = that.busStopArray[i];
+          nearestBusStop = busStopArray[i];
         }
       });
-      _radius += 5;
-      circle.setRadius(_radius);
+      radius += 5;
+      circle.setRadius(radius);
     };
-    circle.setRadius(radius);
-    circle.setCenter(nearlestBusStop);
+    return nearestBusStop;
+  },
+  getBusStopsInRadius: function(position, radius){
+    var busStopInRadius = [],
+    markers = [],
+    busStopArray = this.getBusStopArray();
+    circleOptions = {
+        map: map,
+        center: position,
+        radius: radius,
+        visible: true
+      };
+    busStopArray.forEach(function(el) {
+      markers.push(new google.maps.Marker({
+        position: el,
+        map: map,
+        visible: false
+      }));
+    });
+    var circle = new google.maps.Circle(circleOptions);
+    //circle.setRadius(radius);
+    //circle.setCenter(position);
     markers.forEach(function(el, i) {
       if (circle.getBounds().contains(el.getPosition())) {
-        busStopInRadius.push(that.busStopArray[i]);
+        busStopInRadius.push(busStopArray[i]);
       };
       el.setMap(null);
       markers = [];
     });
     marker = new google.maps.Marker({
-      position: nearlestBusStop,
+      position: position,
       map: map
     });
     return busStopInRadius;
+
   },
   getWay: function() {
     var amount = 0,
@@ -155,8 +194,10 @@ var RouteView = Backbone.View.extend({
       });
       if (amount == 2) {
         google.maps.event.removeListener(listener);
-        var firstBusStops = that.getNearestBusStop(dotArray[0], 150);
-        var secondBusStops = that.getNearestBusStop(dotArray[1], 150);
+        var firstBusStop = that.getNearestBusStop(dotArray[0]);
+        var secondBusStop = that.getNearestBusStop(dotArray[1]);
+        var firstBusStops = that.getBusStopsInRadius(firstBusStop, 150);
+        var secondBusStops = that.getBusStopsInRadius(secondBusStop, 150);
         console.log(firstBusStops);
         console.log(secondBusStops);
         var buses = [],
@@ -183,6 +224,12 @@ var RouteView = Backbone.View.extend({
         console.log(buses);
       }
     });
+  },
+  getPoints: function(){
+    this.$el.html('');
+    this.$el.removeClass('active pad10');
+    this.$el.parent().find('.clicked').removeClass('clicked');
+    this.getWay();
   }
 });
-routeView = new RouteView();
+var menuView = new MenuView();
