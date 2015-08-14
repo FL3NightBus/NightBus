@@ -49,18 +49,6 @@ var MenuView = Backbone.View.extend({
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
     geocoder = new google.maps.Geocoder();
   },
-  autocomplete_map: function () {
-    var from = $('#from');
-    console.log(from.val());
-    var autocomplete = new google.maps.places.Autocomplete(from[0]);
-    //autocomplete.bindTo('bounds', map);
-    google.maps.event.addListener(autocomplete, 'place_changed', function () {
-      var place = autocomplete.getPlace();
-      console.log(place);
-      console.log(place.name);  //название места
-      console.log(place.id);  //уникальный идентификатор места
-    });
-  },
   createSearch: function(){
     var that = this;
     if(!this.searchView){
@@ -78,65 +66,83 @@ var MenuView = Backbone.View.extend({
       this.render('.chat');
     }
   },
-  render: function(pageClass) {
+  hidePage: function(){
     var that = this;
     var time = 0;
-    var submenu = this.$el.parent().find('.submenu');
-    submenu.html('');
+    submenu = that.$el.parent().find('.submenu');
+    submenu.find('.searchPage').css({'display': 'none'});
     if(submenu.hasClass('active')){
       submenu.removeClass('active pad10');
       time = 2000;
     };
-    this.$el.find('.clicked').removeClass('clicked');
+    that.$el.find('.clicked').removeClass('clicked');
+    return time;
+  },
+  render: function(pageClass) {
+    var that = this;
+    var submenu = this.$el.parent().find('.submenu');
+    var time = this.hidePage();
+    //submenu.find('.searchPage').css({'display': 'none'});
+    /*if(submenu.hasClass('active')){
+      submenu.removeClass('active pad10');
+      time = 2000;
+    };*/
+    //this.$el.find('.clicked').removeClass('clicked');
     this.$el.find(pageClass).addClass('clicked');
     setTimeout(function(){
       submenu.addClass('active');
     }, time);
     setTimeout(function(){
-      submenu.html(that.searchView.template).addClass('pad10');
-      that.autocomplete_map();
+      submenu.addClass('pad10')
+      submenu.find('.searchPage').css({'display': 'block'});
     }, time + 2000);
-  },
+  }
 });
+
+
 var SearchView = Backbone.View.extend({
   el: $('.submenu'),
   events: {
-    'click #ok': 'getWay',
     'click #start': 'getPoints',
-    'click #search': 'aa'
+    'click #search': 'setPoints'
   },
-  template: _.template('<div class="find">' +
-                          '<p>SEARCH</p>' +
-                          '<div>' +
-                            '<label for="id">from</label>' +
-                            '<input type="text" id="from" name="from" class="txt" />' +
+  template: _.template('<div class="searchPage">' +
+                          '<div class="autocomplete">' +
+                            '<p>SEARCH</p>' +
+                            '<div>' +
+                              '<label for="id">from</label>' +
+                              '<input type="text" id="from" name="from" class="txt" />' +
+                            '</div>' +
+                            /*'<div class="change">' +
+                              '<input type="button" value="change" id="change" name="change" class="btn btn-default" />' +
+                            '</div>' +*/
+                            '<div>' +
+                              '<label for="to">to</label>' +
+                              '<input type="text" id="to" name="to" class="txt" value="<% this.fieldto %>" />' +
+                            '</div>' +
+                            '<div class="right">' +
+                              '<input type="button" id="clear" name="clear" class="btn btn-default" value="clear" />' +
+                              '<input type="button" id="search" name="search" class="btn btn-default" value="search"  />' +
+                            '</div>' +
                           '</div>' +
-                          /*'<div class="change">' +
-                            '<input type="button" value="change" id="change" name="change" class="btn btn-default" />' +
-                          '</div>' +*/
-                          '<div>' +
-                            '<label for="to">to</label>' +
-                            '<input type="text" id="to" name="to" class="txt" />' +
+                          '<div class="click">' +
+                            '<p>Where I am?<p>' +
+                            '<input type="button" id="here" name="here" class="btn btn-default" value="Here!">' +
+                            '<p>' +
+                              '<img src="img/alert.png"> You can doble click on two points to find your way:' +
+                              '<input type="button" id="start" name="start" class="dbl btn btn-default" value="start">' +
+                            '</p>' +
                           '</div>' +
-                          '<div class="right">' +
-                            '<input type="button" id="clear" name="clear" class="btn btn-default" value="clear" />' +
-                            '<input type="button" id="search" name="search" class="btn btn-default" value="search"  />' +
-                          '</div>' +
-                        '</div>' +
-                        '<div class="click">' +
-                          '<p>Where I am?<p>' +
-                          '<input type="button" id="here" name="here" class="btn btn-default" value="Here!">' +
-                          '<p>' +
-                            '<img src="img/alert.png"> You can doble click on two points to find your way:' +
-                            '<input type="button" id="start" name="start" class="dbl btn btn-default" value="start">' +
-                          '</p>' +
-                        '</div>'
-                        ),
+                        '</div>'),
   busStopArray: [],
+  fieldfrom: '',
+  fieldto: '',
   initialize: function() {
     var that = this;
     this.fetch('http://localhost:8080/api/routes', that.setBusStopArray);
     google.maps.event.addDomListener(window, 'load', this.mapInitialize);
+    this.$el.html(this.template);
+    this.autocompleteListener();
   },
   fetch: function(url, callback){
     var that=this;
@@ -185,6 +191,19 @@ var SearchView = Backbone.View.extend({
   getBusStopArray: function(){
     return this.busStopArray;
   },
+  autocomplete_map: function (selector) {
+    var that = this;
+    var autocomplete = new google.maps.places.Autocomplete(selector);
+    google.maps.event.addListener(autocomplete, 'place_changed', function () {
+      that['field'+selector.name] = autocomplete.getPlace().geometry.location;
+    });
+  },
+  autocompleteListener: function(){
+    var from = $('#from');
+    var to = $('#to');
+    this.autocomplete_map(from[0]);
+    this.autocomplete_map(to[0]);
+  },
   getNearestBusStop: function(position) {
     var nearestBusStop,
       markers = [],
@@ -219,7 +238,7 @@ var SearchView = Backbone.View.extend({
     };
     return nearestBusStop;
   },
-  codeAddress: function() {
+  /*codeAddress: function() {
     var address = document.getElementById("address").value;
     address += ' Lviv';
     geocoder.geocode( { 'address': address}, function(results, status) {
@@ -235,7 +254,7 @@ var SearchView = Backbone.View.extend({
         alert("Geocode was not successful for the following reason: " + status);
       }
     });
-  },
+  },*/
   getBusStopsInRadius: function(position, radius){
     var busStopInRadius = [],
     markers = [],
@@ -270,55 +289,61 @@ var SearchView = Backbone.View.extend({
     return busStopInRadius;
 
   },
-  getWay: function() {
+  getWay: function(coord1, coord2) {
+    var firstBusStop = this.getNearestBusStop(coord1);
+    var secondBusStop = this.getNearestBusStop(coord2);
+    var firstBusStops = this.getBusStopsInRadius(firstBusStop, 150);
+    var secondBusStops = this.getBusStopsInRadius(secondBusStop, 150);
+    console.log(firstBusStops);
+    console.log(secondBusStops);
+    var buses = [],
+      busesNotCross = [];
+    firstBusStops.forEach(function(el1) {
+      secondBusStops.forEach(function(el2) {
+        el2.route.forEach(function(el3) {
+          if (el1.route.indexOf(el3) != -1) {
+            if (buses.indexOf(el3) == -1) {
+              buses.push(el3);
+            }
+          } else if (busesNotCross.indexOf(el3) == -1) {
+            busesNotCross.push(el3);
+          }
+        })
+      })
+    });
+    /*if (!buses.length) {
+      buses = busesNotCross;
+    };*/
+    console.log(buses);
+      
+  },
+  getPoints: function(){
+    /*this.$el.parent().find('.submenu').find('.searchPage').css({'display': 'none'});
+    this.$el.removeClass('active pad10');
+    this.$el.parent().find('.clicked').removeClass('clicked');*/
     var amount = 0,
       dotArray = [],
       that = this;
+    map.setOptions({
+      disableDoubleClickZoom: true
+    });
+    menuView.hidePage();
     var listener = google.maps.event.addListener(map, 'dblclick', function(e) {
       amount++;
       console.log(e.latLng);
       dotArray.push(e.latLng);
-      map.setOptions({
-        disableDoubleClickZoom: true
-      });
       if (amount == 2) {
         google.maps.event.removeListener(listener);
-        var firstBusStop = that.getNearestBusStop(dotArray[0]);
-        var secondBusStop = that.getNearestBusStop(dotArray[1]);
-        var firstBusStops = that.getBusStopsInRadius(firstBusStop, 150);
-        var secondBusStops = that.getBusStopsInRadius(secondBusStop, 150);
-        console.log(firstBusStops);
-        console.log(secondBusStops);
-        var buses = [],
-          busesNotCross = [];
-        firstBusStops.forEach(function(el1) {
-          secondBusStops.forEach(function(el2) {
-            el2.route.forEach(function(el3) {
-              if (el1.route.indexOf(el3) != -1) {
-                if (buses.indexOf(el3) == -1) {
-                  buses.push(el3);
-                }
-              } else if (busesNotCross.indexOf(el3) == -1) {
-                busesNotCross.push(el3);
-              }
-            })
-          })
-        });
-        /*if (!buses.length) {
-          buses = busesNotCross;
-        };*/
         map.setOptions({
           disableDoubleClickZoom: false
         });
-        console.log(buses);
+        that.getWay(dotArray[0], dotArray[1]);
       }
     });
   },
-  getPoints: function(){
-    this.$el.html('');
-    this.$el.removeClass('active pad10');
-    this.$el.parent().find('.clicked').removeClass('clicked');
-    this.getWay();
+  setPoints: function(){
+    menuView.hidePage();
+    this.getWay(this.fieldfrom, this.fieldto);
   }
 });
 var menuView = new MenuView();
