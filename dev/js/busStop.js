@@ -1,14 +1,11 @@
 var map;
 var ChatView = Backbone.View.extend({
-  template: _.template('<div class="find">' +
+  /*template: _.template('<div class="find">' +
                           '<p>SEARCH</p>' +
                           '<div>' +
                             '<label for="id">from</label>' +
                             '<input type="text" id="from" name="from" class="txt" />' +
                           '</div>' +
-                          /*'<div class="change">' +
-                            '<input type="button" value="change" id="change" name="change" class="btn btn-default" />' +
-                          '</div>' +*/
                           '<div>' +
                             '<label for="to">to</label>' +
                             '<input type="text" id="to" name="to" class="txt" />' +
@@ -26,7 +23,7 @@ var ChatView = Backbone.View.extend({
                             '<input type="button" id="start" name="start" class="dbl btn btn-default" value="start">' +
                           '</p>' +
                         '</div>'
-                        )
+                        )*/
 });
 var MenuView = Backbone.View.extend({
   el: $('#nav'),
@@ -52,13 +49,26 @@ var MenuView = Backbone.View.extend({
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
     geocoder = new google.maps.Geocoder();
   },
+  autocomplete_map: function () {
+    var from = $('#from');
+    console.log(from.val());
+    var autocomplete = new google.maps.places.Autocomplete(from[0]);
+    //autocomplete.bindTo('bounds', map);
+    google.maps.event.addListener(autocomplete, 'place_changed', function () {
+      var place = autocomplete.getPlace();
+      console.log(place);
+      console.log(place.name);  //название места
+      console.log(place.id);  //уникальный идентификатор места
+    });
+  },
   createSearch: function(){
+    var that = this;
     if(!this.searchView){
       this.searchView = new SearchView();
     };
     if(!this.$el.find('.search').hasClass('clicked')) {
-      this.render('.search');
-    }
+      that.render('.search');
+    };
   },
   createChat: function(){
     if(!this.searchView){
@@ -84,6 +94,7 @@ var MenuView = Backbone.View.extend({
     }, time);
     setTimeout(function(){
       submenu.html(that.searchView.template).addClass('pad10');
+      that.autocomplete_map();
     }, time + 2000);
   },
 });
@@ -91,7 +102,8 @@ var SearchView = Backbone.View.extend({
   el: $('.submenu'),
   events: {
     'click #ok': 'getWay',
-    'click #start': 'getPoints'
+    'click #start': 'getPoints',
+    'click #search': 'aa'
   },
   template: _.template('<div class="find">' +
                           '<p>SEARCH</p>' +
@@ -108,7 +120,7 @@ var SearchView = Backbone.View.extend({
                           '</div>' +
                           '<div class="right">' +
                             '<input type="button" id="clear" name="clear" class="btn btn-default" value="clear" />' +
-                            '<input type="button" id="seach" name="seach" class="btn btn-default" value="seach"  />' +
+                            '<input type="button" id="search" name="search" class="btn btn-default" value="search"  />' +
                           '</div>' +
                         '</div>' +
                         '<div class="click">' +
@@ -140,28 +152,31 @@ var SearchView = Backbone.View.extend({
       }
     });
   },
-  
+  busStopCoordinateComparison: function(routeCoord, busStopCoord1, busStopArray){
+    for (var i = 0, len = busStopArray.length; i < len; i++) {
+      var busStopCoord2 = busStopArray[i];
+      if (busStopCoord1.busStop == busStopCoord2.busStop && busStopCoord1.lat == busStopCoord2.lat && busStopCoord1.lng == busStopCoord2.lng) {
+        if (busStopCoord2.route.indexOf(routeCoord.name) == -1) {
+          busStopArray[i].route.push(routeCoord.name);
+        }
+        return busStopArray;
+      } else if (i == len - 1) {
+        busStopArray.push(busStopCoord1);
+        busStopArray[i + 1].route = [routeCoord.name];
+      }
+    }
+    if (len === 0) {
+      busStopArray.push(busStopCoord1);
+      busStopArray[0].route = [routeCoord.name];
+    };
+    return busStopArray;
+  },
   setBusStopArray: function(arrayOfCoordinates, that) {
     var busStopArray = [];
     arrayOfCoordinates.forEach(function(el1) {
       el1.routeArray.forEach(function(el2) {
         if (el2.busStop) {
-          for (var i = 0, len = busStopArray.length; i < len; i++) {
-            var el3 = busStopArray[i];
-            if (el2.busStop == el3.busStop && el2.lat == el3.lat && el2.lng == el3.lng) {
-              if (busStopArray[i].route.indexOf(el1.name) == -1) {
-                busStopArray[i].route.push(el1.name);
-              }
-              break;
-            } else if (i == len - 1) {
-              busStopArray.push(el2);
-              busStopArray[i + 1].route = [el1.name];
-            }
-          }
-          if (!len) {
-            busStopArray.push(el2);
-            busStopArray[0].route = [el1.name];
-          };
+          busStopArray = that.busStopCoordinateComparison(el1, el2, busStopArray);
         }
       })
     });
@@ -203,6 +218,23 @@ var SearchView = Backbone.View.extend({
       circle.setRadius(radius);
     };
     return nearestBusStop;
+  },
+  codeAddress: function() {
+    var address = document.getElementById("address").value;
+    address += ' Lviv';
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        map.setCenter(results[0].geometry.location);
+       console.log(results[0].geometry.location)
+        var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location,
+
+        });
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
   },
   getBusStopsInRadius: function(position, radius){
     var busStopInRadius = [],
@@ -287,25 +319,6 @@ var SearchView = Backbone.View.extend({
     this.$el.removeClass('active pad10');
     this.$el.parent().find('.clicked').removeClass('clicked');
     this.getWay();
-  },
-   codeAddress: function() {
-    var address = document.getElementById("address").value;
-    address += ' Lviv';
-    geocoder.geocode( { 'address': address}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        map.setCenter(results[0].geometry.location);
-       console.log(results[0].geometry.location)
-        var marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location,
-
-        });
-      } else {
-        alert("Geocode was not successful for the following reason: " + status);
-      }
-    });
-   
   }
 });
 var menuView = new MenuView();
-
