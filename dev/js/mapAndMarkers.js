@@ -1,7 +1,8 @@
 (function($, window, undefined) {
     var MapView = Backbone.View.extend({
         initialize: function() {
-            this.yourPosition = {}
+            this.yourPosition = {};
+            this.render();
         },
         render: function() {
             //   var startCoords = [49.83916569, 23.99448127];
@@ -70,11 +71,11 @@
             console.log(this.yourPosition);
         },
         getYourPosition: function() {
-            return this.yourPosition;
+            console.log(this.yourPosition);
+    //        return this.yourPosition;
         },
     });
     var mapView = new MapView();
-    mapView.render();
 
     var FormView = Backbone.View.extend({
         initialize: function() {
@@ -87,7 +88,11 @@
         render: function() {},
         el: '#form',
         events: {
-            'change input:checkbox': 'listener'
+            'change input:checkbox': 'listener',
+            'click button#location': 'getPosition'
+        },
+        getPosition: function() {
+            mapView.getYourPosition();
         },
         getBusArray: function(id) {
             return this.busArray['id' + id];
@@ -109,7 +114,7 @@
             if ($('#' + elem + ':checked').val()) {
                 this.setStoper(elem, true);
                 // if checkbox is 'checked' than we send data (# of route and interval) to busOnWay()
-                this.firstRequest(elem, interval);
+                this.firstRequest(elem);
                 this.busOnWay(elem, interval);
             };
             // listener for checkboxes. When !'ckecked' - route with #id '[1-7]H' will be cut from Map
@@ -150,29 +155,23 @@
             if (x < 0) {
                 angle += 360;
             }
-     //       console.log('x = ' + x + ', y = ' + y + ', angle = ' + angle);
             return 90 - angle;
         },
-        firstRequest: function(bus, interval) {
+        firstRequest: function(bus) {
             var that = this;
             that.setMarkers(bus, []);
-            var inter = interval * 1000;
             var map = mapView.getMap();
             $.ajax({
                 type: "GET",
                 dataType: 'jsonp',
-                url: 'https://try1208.localtunnel.me/api/routes?route=' + bus,
-                //url: 'https://local.localtunnel.me/api/routes/2H' + bus,
+                url: 'https://try1408.localtunnel.me/api/routes?route=' + bus,
                 success: function(response) {
-                    //                console.log(response);
                     if (that.getStoper(bus)) {
                         // here we create an array of locations (coordinates for future markers)
                         var locationsArray = [];
                         // going throught response (array of objects (with pairs of coords)) to create locations
                         for (var i = 0; i < response.length; i++) {
                             locationsArray.push(new google.maps.LatLng(response[i].lat, response[i].lng));
-         //                   console.log(response[i].lat);
-           //                 console.log(response[i].lng);
                         };
                         that.setBusArray(bus, locationsArray);
                         that.setAnglesArray(bus, []);
@@ -189,18 +188,17 @@
         busOnWay: function(bus, interval) {
             var that = this;
             that.setMarkers(bus, []);
-            // inter - number of miliseconds for setInterval to get data from server and render it on Map
-            var inter = interval * 1000;
+            // time - number of miliseconds for setInterval to get data from server and render it on Map
+            var time = interval * 1000;
             var map = mapView.getMap();
             var busArr = [], angArr = [];
             var timer = setInterval(function() {
-                // this GET allow us get a coordinats from server and send them to setMerker();
+                // this GET allow us get a coordinates from server and send them to setMerker();
                 // also we can get a coordinats for few buses. So we should be ready to support all of them 
                 $.ajax({
                     type: "GET",
                     dataType: 'jsonp',
-                    url: 'https://try1208.localtunnel.me/api/routes?route=' + bus,
-                    //url: 'https://local.localtunnel.me/api/routes/2H' + bus,
+                    url: 'https://try1408.localtunnel.me/api/routes?route=' + bus,
                     success: function(response) {
                         // here we create an array of locations (coordinates for future markers) and angles between markers
                         var angleArray = [];
@@ -217,16 +215,16 @@
                             angArr = that.getAnglesArray(bus);
                             that.setBusArray(bus, locationsArray);
                             for (var i = 0; i < locationsArray.length; i++) {
-                    //            console.log(busArr[i] + ' & ' + locationsArray[i]);
+                                console.log(busArr[i] + ' & ' + locationsArray[i]);
                                 var angle = (that.getAngle(busArr[i], locationsArray[i]));
-                                console.log(angle);
+                                console.log('angle = ' + angle);
 
                                 var tempA = locationsArray[i];
                                 var tempB = busArr[i];
 
                                 if ((tempA.G === tempB.G) && (tempA.K === tempB.K)) {
                                     angle = angArr[i];
-                                    console.log(angle);
+                                    console.log('it\'s busStop, so new angle = ' + angle);
                                 }
                                 angleArray.push(angle);
                             };
@@ -240,14 +238,14 @@
                         console.log(response);
                     }
                 });
-            }, inter);
+            }, time);
             that.setTimer(bus, timer);
         },
         setMarker: function(locations, map, bus, angleArray, stop) {
             var that = this;
             var markers = that.getMarkers(bus);
             // put marker on the Map. First of all it clear Map and put new one, 
-            //          function setMarker(locations, map, stop) {
+            // function setMarker(locations, map, stop) {
             deleteMarkers();
             //if (!stop) then function just delete all markers
             if (stop) {
@@ -259,14 +257,39 @@
             }
 
             function addMarker(location, angle) {
-                console.log(location);
+                var color; 
+                switch(bus) {
+                    case '1H':
+                        color = 'blue';
+                        break;
+                    case '2H':
+                        color = 'green';
+                        break;
+                    case '3H':
+                        color = 'orange';
+                        break;
+                    case '4H':
+                        color = 'red';
+                        break;
+                    case '5H':
+                        color = 'purple';
+                        break;
+                    case '6H':
+                        color = 'yellow';
+                        break;
+                    case '6H':
+                        color = 'brown';
+                        break;
+                    default:
+                        color = 'black';
+                }
             //    var image = '../img/' + bus + '.png';
                 var marker = new google.maps.Marker({
                     position: location,
                     map: map,
                     icon: {
                         path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                        fillColor: 'green',
+                        fillColor: color,
                         fillOpacity: 0.8,
                         scale: 3,
                         rotation: angle
