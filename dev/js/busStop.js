@@ -1,30 +1,4 @@
 var map;
-var ChatView = Backbone.View.extend({
-  /*template: _.template('<div class="find">' +
-                          '<p>SEARCH</p>' +
-                          '<div>' +
-                            '<label for="id">from</label>' +
-                            '<input type="text" id="from" name="from" class="txt" />' +
-                          '</div>' +
-                          '<div>' +
-                            '<label for="to">to</label>' +
-                            '<input type="text" id="to" name="to" class="txt" />' +
-                          '</div>' +
-                          '<div class="right">' +
-                            '<input type="button" id="clear" name="clear" class="btn btn-default" value="clear" />' +
-                            '<input type="button" id="seach" name="seach" class="btn btn-default" value="seach"  />' +
-                          '</div>' +
-                        '</div>' +
-                        '<div class="click">' +
-                          '<p>Where I am?<p>' +
-                          '<input type="button" id="here" name="here" class="btn btn-default" value="Here!">' +
-                          '<p>' +
-                            '<img src="img/alert.png"> You can doble click on two points to find your way:' +
-                            '<input type="button" id="start" name="start" class="dbl btn btn-default" value="start">' +
-                          '</p>' +
-                        '</div>'
-                        )*/
-});
 var MenuView = Backbone.View.extend({
   el: $('#nav'),
   events:{
@@ -82,12 +56,6 @@ var MenuView = Backbone.View.extend({
     var that = this;
     var submenu = this.$el.parent().find('.submenu');
     var time = this.hidePage();
-    //submenu.find('.searchPage').css({'display': 'none'});
-    /*if(submenu.hasClass('active')){
-      submenu.removeClass('active pad10');
-      time = 2000;
-    };*/
-    //this.$el.find('.clicked').removeClass('clicked');
     this.$el.find(pageClass).addClass('clicked');
     setTimeout(function(){
       submenu.addClass('active');
@@ -137,6 +105,8 @@ var SearchView = Backbone.View.extend({
   busStopArray: [],
   fieldfrom: '',
   fieldto: '',
+  busStopMarkers: [],
+  markers: [],
   initialize: function() {
     var that = this;
     this.fetch('http://localhost:8080/api/routes', that.setBusStopArray);
@@ -184,7 +154,7 @@ var SearchView = Backbone.View.extend({
         if (el2.busStop) {
           busStopArray = that.busStopCoordinateComparison(el1, el2, busStopArray);
         }
-      })
+      });
     });
     that.busStopArray = busStopArray;
   },
@@ -204,146 +174,147 @@ var SearchView = Backbone.View.extend({
     this.autocomplete_map(from[0]);
     this.autocomplete_map(to[0]);
   },
-  getNearestBusStop: function(position) {
-    var nearestBusStop,
-      markers = [],
-      radius = 0,
-      marker = new google.maps.Marker({
-        position: position,
-        map: map
-      }),
-      circleOptions = {
-        map: map,
-        center: position,
-        radius: radius,
-        visible: true
-      },
+  setBusStopMarkers: function(){
+    var that = this,
       busStopArray = this.getBusStopArray();
-      var circle = new google.maps.Circle(circleOptions);
     busStopArray.forEach(function(el) {
-      markers.push(new google.maps.Marker({
+      that.busStopMarkers.push(new google.maps.Marker({
         position: el,
         map: map,
         visible: false
       }));
     });
+  },
+  getBusStopMarkers: function(){
+    return this.busStopMarkers;
+  },
+  setMarkers: function(position){
+    var that = this;
+    that.markers.push(new google.maps.Marker({
+      position: position,
+      map: map,
+      visible: true
+    }))
+  },
+  deleteMarkers: function(markers){
+    markers.forEach(function(el){
+      el.setMap(null);
+    })  
+    markers = [];
+    return markers;
+  },
+  setCircleOptions: function(map, position, radius, isVisible){
+    return {
+        map: map,
+        center: position,
+        radius: radius,
+        visible: isVisible
+      }
+  },
+  getNearestBusStop: function(position) {
+    var nearestBusStop,
+      pos,
+      distance,
+      radius = 0,
+      circleOptions = this.setCircleOptions(map, position, radius, true);
+      this.setMarkers(position);
+      busStopArray = this.getBusStopArray();
+    var circle = new google.maps.Circle(circleOptions);
     while (!nearestBusStop) {
-      markers.forEach(function(el, i) {
+      this.getBusStopMarkers().forEach(function(el, i) {
         if (circle.getBounds().contains(el.getPosition())) {
           nearestBusStop = busStopArray[i];
+          pos = el.getPosition();
         }
       });
       radius += 5;
       circle.setRadius(radius);
     };
+    radius = google.maps.geometry.spherical.computeDistanceBetween(pos, position);
+    circle.setRadius(radius);
     return nearestBusStop;
   },
-  /*codeAddress: function() {
-    var address = document.getElementById("address").value;
-    address += ' Lviv';
-    geocoder.geocode( { 'address': address}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        map.setCenter(results[0].geometry.location);
-       console.log(results[0].geometry.location)
-        var marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location,
-
-        });
-      } else {
-        alert("Geocode was not successful for the following reason: " + status);
-      }
-    });
-  },*/
   getBusStopsInRadius: function(position, radius){
     var busStopInRadius = [],
-    markers = [],
-    busStopArray = this.getBusStopArray();
-    circleOptions = {
-        map: map,
-        center: position,
-        radius: radius,
-        visible: true
-      };
-    busStopArray.forEach(function(el) {
-      markers.push(new google.maps.Marker({
-        position: el,
-        map: map,
-        visible: false
-      }));
-    });
+      that = this,
+      circleOptions = this.setCircleOptions(map, position, radius, false);
+
+    this.setMarkers(position);
+    var busStopArray = this.getBusStopArray();
     var circle = new google.maps.Circle(circleOptions);
-    //circle.setRadius(radius);
-    //circle.setCenter(position);
-    markers.forEach(function(el, i) {
+    this.getBusStopMarkers().forEach(function(el, i) {
       if (circle.getBounds().contains(el.getPosition())) {
+        that.setMarkers(busStopArray[i]);
         busStopInRadius.push(busStopArray[i]);
       };
-      el.setMap(null);
-      markers = [];
-    });
-    marker = new google.maps.Marker({
-      position: position,
-      map: map
     });
     return busStopInRadius;
 
   },
-  getWay: function(coord1, coord2) {
-    var firstBusStop = this.getNearestBusStop(coord1);
-    var secondBusStop = this.getNearestBusStop(coord2);
-    var firstBusStops = this.getBusStopsInRadius(firstBusStop, 150);
-    var secondBusStops = this.getBusStopsInRadius(secondBusStop, 150);
-    console.log(firstBusStops);
-    console.log(secondBusStops);
+  getRequiredBusStops: function(coord) {
+    var busStop = this.getNearestBusStop(coord),
+      busStops = this.getBusStopsInRadius(busStop, 150);
+    console.log(busStops);
+    return busStops;
+  },
+  getBusNumbers: function(busStopsFrom, busStopsTo){
     var buses = [],
       busesNotCross = [];
-    firstBusStops.forEach(function(el1) {
-      secondBusStops.forEach(function(el2) {
-        el2.route.forEach(function(el3) {
-          if (el1.route.indexOf(el3) != -1) {
-            if (buses.indexOf(el3) == -1) {
-              buses.push(el3);
+    busStopsFrom.forEach(function(from) {
+      from.route.forEach(function(routeNumber){
+        if (busesNotCross.indexOf(routeNumber) == -1) {
+          busesNotCross.push(routeNumber);
+        }
+      });
+      busStopsTo.forEach(function(to) {
+        to.route.forEach(function(routeNumber) {
+          if (from.route.indexOf(routeNumber) != -1) {
+            if (buses.indexOf(routeNumber) == -1) {
+              buses.push(routeNumber);
             }
-          } else if (busesNotCross.indexOf(el3) == -1) {
-            busesNotCross.push(el3);
+          } else if (busesNotCross.indexOf(routeNumber) == -1) {
+            busesNotCross.push(routeNumber);
           }
         })
       })
     });
-    /*if (!buses.length) {
+    if (buses.length === 0) {
       buses = busesNotCross;
-    };*/
+    };
     console.log(buses);
-      
   },
   getPoints: function(){
-    /*this.$el.parent().find('.submenu').find('.searchPage').css({'display': 'none'});
-    this.$el.removeClass('active pad10');
-    this.$el.parent().find('.clicked').removeClass('clicked');*/
     var amount = 0,
-      dotArray = [],
+      busStopsArray = [],
       that = this;
+    this.setBusStopMarkers();
+    //var zoom = map.getZoom();
     map.setOptions({
       disableDoubleClickZoom: true
     });
     menuView.hidePage();
     var listener = google.maps.event.addListener(map, 'dblclick', function(e) {
       amount++;
-      console.log(e.latLng);
-      dotArray.push(e.latLng);
+      busStopsArray.push(that.getRequiredBusStops(e.latLng));
       if (amount == 2) {
         google.maps.event.removeListener(listener);
+        that.busStopMarkers = that.deleteMarkers(that.busStopMarkers);
+        //map.setZoom(zoom);
+        that.getBusNumbers(busStopsArray[0], busStopsArray[1]);
         map.setOptions({
           disableDoubleClickZoom: false
         });
-        that.getWay(dotArray[0], dotArray[1]);
       }
     });
   },
   setPoints: function(){
     menuView.hidePage();
-    this.getWay(this.fieldfrom, this.fieldto);
+    this.setBusStopMarkers();
+    console.log(this.fieldfrom);
+    var busStopsFrom = this.getRequiredBusStops(this.fieldfrom);
+    var busStopsTo = this.getRequiredBusStops(this.fieldto);
+    this.busStopMarkers = this.deleteMarkers(this.busStopMarkers);
+    this.getBusNumbers(busStopsFrom, busStopsTo);
   }
 });
 var menuView = new MenuView();
