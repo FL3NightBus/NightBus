@@ -6,11 +6,23 @@
         this.busArray = {};
         this.anglesArray = {};
       },
-      render: function () {},
+      render: function () {
+        var tmplHTML = $("#checkmenu-template").text();
+        var tmpl = _.template(tmplHTML);
+        $('.submenu').html(tmpl);
+        console.log(this.$el);
+        this.clicker();
+      },
       el: '#form',
       events: {
         'change input:checkbox': 'listener',
         'click button#location': 'getPosition'
+      },
+      clicker: function() {
+        var that = this;
+        $('input:checkbox').click(function(){
+          that.listener();
+        });
       },
       getPosition: function () {
         mapView.getYourPosition();
@@ -85,7 +97,7 @@
         $.ajax({
           type: "GET",
           dataType: 'jsonp',
-          url: 'https://try1408.localtunnel.me/api/routes?route=' + bus,
+          url: 'https://try1408.localtunnel.me/api/routes?route=' + bus + 'H',
           success: function (response) {
             if (that.getStoper(bus)) {
               // here we create an array of locations (coordinates for future markers)
@@ -120,7 +132,7 @@
           $.ajax({
             type: "GET",
             dataType: 'jsonp',
-            url: 'https://try1408.localtunnel.me/api/routes?route=' + bus,
+            url: 'https://try1408.localtunnel.me/api/routes?route=' + bus + 'H',
             success: function (response) {
               // here we create an array of locations (coordinates for future markers) and angles between markers
               var angleArray = [];
@@ -137,16 +149,16 @@
                 angArr = that.getAnglesArray(bus);
                 that.setBusArray(bus, locationsArray);
                 for (var i = 0; i < locationsArray.length; i++) {
-                  console.log(busArr[i] + ' & ' + locationsArray[i]);
+      //            console.log(busArr[i] + ' & ' + locationsArray[i]);
                   var angle = (that.getAngle(busArr[i], locationsArray[i]));
-                  console.log('angle = ' + angle);
+     //             console.log('angle = ' + angle);
 
                   var tempA = locationsArray[i];
                   var tempB = busArr[i];
 
                   if ((tempA.G === tempB.G) && (tempA.K === tempB.K)) {
                     angle = angArr[i];
-                    console.log('it\'s busStop, so new angle = ' + angle);
+      //              console.log('it\'s busStop, so new angle = ' + angle);
                   }
                   angleArray.push(angle);
                 };
@@ -182,25 +194,25 @@
         function addMarker(location, angle) {
           var color;
           switch (bus) {
-          case '1H':
+          case '1':
             color = 'blue';
             break;
-          case '2H':
+          case '2':
             color = 'green';
             break;
-          case '3H':
+          case '3':
             color = 'orange';
             break;
-          case '4H':
+          case '4':
             color = 'red';
             break;
-          case '5H':
+          case '5':
             color = 'purple';
             break;
-          case '6H':
+          case '6':
             color = 'yellow';
             break;
-          case '6H':
+          case '7':
             color = 'brown';
             break;
           default:
