@@ -39,6 +39,7 @@ router.route('/comments')
     comment.comments = req.query.comment; // set the routes name (comes from the request)
     comment.name = req.query.name;
     comment.time = req.query.time;
+    comment.icon = req.query.icon;
     comment.save(function(err) {
       if (err) {
         res.send(err);

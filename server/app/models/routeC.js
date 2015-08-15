@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var CommentsSchema = new Schema({
-	time: Date,
+  time: Date,
+  icon: String,
   name: String,
   comments: String
 });
