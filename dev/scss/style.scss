@@ -20,97 +20,8 @@ html, body, #map {
 	height: 27px;
 	width: 280px;
 }
-#nav {
-	position: absolute;
-	top: 0;
-	width: 100%;
-	height: 15%;
-	z-index: 1;
-	background: $panel;
-	.button + .button {
-		border-left: solid 3px $submenu;
-	}
-}
-.button {
-	float: left;
-	width: 25%;
-	vertical-align: middle;  
-	height: 100%;
-	
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	z-index: 1;
-	img {
-		position: relative;
-		display: block;
-		top: 50%;
-		left: 50%;
-		margin-left: -32px;
-		margin-top: -32px;
-	}
-}
-#footer{
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	height: 20px;
-	z-index: 1;
-	background: $panel;
-}
 .clicked {
 	background-color: $submenu;
-}
-.submenu {
-	position: absolute;
-	top: 15%;
-	width: 100%;
-	height: 0;
-	clear: both;
-	
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	
-	-moz-transition: height 1s; /* Firefox 4 */
-	-webkit-transition: height 1s; /* Safari and Chrome */
-	-o-transition: height 1s; /* Opera */
-	opacity: 0.8;
-	
-	background-color: $submenu;
-	div {
-		margin: 10px 0;
-	}
-	label {
-		display: inline-block;
-		width: 60px;
-		text-align: right;
-	}
-	input[type=button] {
-		width: 70px;
-	}
-	.search {
-		display: none;
-	}
-	.autocomplete {
-		p {
-			margin-left: 25px; 
-			border-bottom: 2px solid #fff;
-			width: 60%;
-		}
-		input {
-			margin: 0 20px;
-		}
-	}
-	.click {
-		margin-left: 25px; 
-	}
-	#start {
-		margin-top: 10px;
-	}
-}
-.submenu.active {
-	height: 85%;
 }
 .btn {
 	display: inline-block;
@@ -164,8 +75,106 @@ html, body, #map {
 .btn-default:active {
 	background-image: none;
 }
+#nav {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 15%;
+	z-index: 1;
+	background: $panel;
+	.button + .button {
+		border-left: solid 3px $submenu;
+	}
+	.button {
+		float: left;
+		width: 25%;
+		vertical-align: middle;  
+		height: 100%;
+		
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+		z-index: 1;
+		img {
+			position: relative;
+			display: block;
+			top: 50%;
+			left: 50%;
+			margin-left: -32px;
+			margin-top: -32px;
+		}
+	}
+}
+.submenu {
+	position: absolute;
+	top: 15%;
+	width: 100%;
+	height: 0;
+	clear: both;
+	
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	
+	-moz-transition: height 1s; /* Firefox 4 */
+	-webkit-transition: height 1s; /* Safari and Chrome */
+	-o-transition: height 1s; /* Opera */
+	opacity: 0.8;
+	
+	background-color: $submenu;
+	div {
+		margin: 10px 0;
+	}
+	label {
+		display: inline-block;
+		width: 60px;
+		text-align: right;
+	}
+	input[type=button] {
+		width: 70px;
+	}
+	.search {
+		display: none;
+	}
+	.autocomplete {
+		p {
+			margin-left: 25px; 
+			border-bottom: 2px solid #fff;
+			width: 60%;
+		}
+		input {
+			margin: 0 20px;
+		}
+	}
+	.click {
+		margin-left: 25px; 
+	}
+	#start {
+		margin-top: 10px;
+	}
+}
+.submenu.active {
+	height: 85%;
+}
+#footer{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 20px;
+	z-index: 1;
+	background: $panel;
+}
 
 @media only screen and (min-width: 420px) {
+	.txt {
+		width: 320px;	
+	}
+	.btn {
+		background: $button; 
+	}
+	.page {
+		color: #fff;
+	}
 	#nav {
 		width: 100px;
 		text-align: center;
@@ -173,34 +182,19 @@ html, body, #map {
 		.button + .button {
 			border-left: none;
 		}
-	}
-	.page {
-		color: #fff;
-	}
-	.txt {
-		width: 320px;
-		
-	}
-	.btn {
-		background: $button; 
-	}
-	.button {
-		float: none;
-		display: block;
-		height: 100px;
-		width: 100%;
-		padding: 18px; 
-		border-bottom: solid 3px #ffce43;
-		img {
-			top: 0;
-			left: 0;
-			margin: 0;
+		.button {
+			float: none;
+			display: block;
+			height: 100px;
+			width: 100%;
+			padding: 18px; 
+			border-bottom: solid 3px #ffce43;
+			img {
+				top: 0;
+				left: 0;
+				margin: 0;
+			}
 		}
-	}
-	#footer{
-		right: 0;
-		width: 20px;
-		height: 100%;
 	}
 	.submenu {
 		height: 100%;
@@ -234,6 +228,11 @@ html, body, #map {
 	}
 	.submenu.active {
 		width: 428px;
+		height: 100%;
+	}
+	#footer{
+		right: 0;
+		width: 20px;
 		height: 100%;
 	}
 }

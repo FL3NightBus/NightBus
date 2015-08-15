@@ -8,12 +8,12 @@ var MenuView = Backbone.View.extend({
   searchView: null,
   chatView: null,
   onLineTraffic: null,
-  initialize: function () {
+  initialize: function() {
     this.yourPosition = {};
     //     google.maps.event.addDomListener(window, 'load', this.mapInitialize);
     this.mapInitialize();
   },
-  mapInitialize: function () {
+  mapInitialize: function() {
     //   var startCoords = [49.83916569, 23.99448127];
     var mapOptions = {
       //        center: new google.maps.LatLng(startCoords[0], startCoords[1]),
@@ -33,14 +33,14 @@ var MenuView = Backbone.View.extend({
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
     this.getGeoLocation();
   },
-  getMap: function () {
+  getMap: function() {
     return this.map;
   },
-  getGeoLocation: function () {
+  getGeoLocation: function() {
     var map = this.getMap();
     var that = this;
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
+      navigator.geolocation.getCurrentPosition(function(position) {
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         var infowindow = new google.maps.InfoWindow({
           map: map,
@@ -49,7 +49,7 @@ var MenuView = Backbone.View.extend({
         });
         that.setYourPosition(pos);
         map.setCenter(pos);
-      }, function () {
+      }, function() {
         that.handleNoGeolocation(true);
       });
     } else {
@@ -57,8 +57,7 @@ var MenuView = Backbone.View.extend({
       that.handleNoGeolocation(false);
     }
   },
-  el: '#map',
-  handleNoGeolocation: function (errorFlag) {
+  handleNoGeolocation: function(errorFlag) {
     if (errorFlag) {
       var content = '';
     } else {
@@ -72,23 +71,25 @@ var MenuView = Backbone.View.extend({
     //  var infowindow = new google.maps.InfoWindow(options);
     this.map.setCenter(options.position);
   },
-  setYourPosition: function (coords) {
+  setYourPosition: function(coords) {
     this.yourPosition.lat = coords.G;
     this.yourPosition.lng = coords.K;
     console.log(this.yourPosition);
   },
-  getYourPosition: function () {
+  getYourPosition: function() {
     return this.yourPosition;
   },
-  createSearch: function () {
+  createSearch: function() {
     if (!this.searchView) {
       this.searchView = new SearchView();
     };
-    if (!this.$el.find('.search').hasClass('clicked')) {
+    if (this.$el.find('.search').hasClass('clicked')) {
+      this.hidePage();
+    } else {
       this.render('.search');
-    };
+    }
   },
-  createChat: function () {
+  createChat: function() {
     if (!this.searchView) {
       this.searchView = new SearchView();
     };
@@ -96,7 +97,7 @@ var MenuView = Backbone.View.extend({
       this.render('.chat');
     }
   },
-  createOnLineTraffic: function () {
+  createOnLineTraffic: function() {
     if (!this.onLineTraffic) {
       this.onLineTraffic = new OnLineTraffic();
     };
@@ -104,7 +105,7 @@ var MenuView = Backbone.View.extend({
       this.render('.onLineTraffic');
     }
   },
-  hidePage: function () {
+  hidePage: function() {
     var that = this;
     var time = 0;
     submenu = that.$el.parent().find('.submenu');
@@ -118,15 +119,25 @@ var MenuView = Backbone.View.extend({
     that.$el.find('.clicked').removeClass('clicked');
     return time;
   },
-  render: function (pageClass) {
+  render: function(pageClass) {
     var that = this;
     var submenu = this.$el.parent().find('.submenu');
     var time = this.hidePage();
+    if (this.searchView.listener) {
+      google.maps.event.removeListener(this.searchView.listener);
+      this.map.setOptions({
+        disableDoubleClickZoom: false
+      });
+      if(this.$el.find('.search').hasClass('dblclicked')){
+        this.searchView.busStopMarkers = this.searchView.deleteMarkers(this.searchView.busStopMarkers);
+        this.$el.find('.search').removeClass('dblclicked');
+      }
+    };
     this.$el.find(pageClass).addClass('clicked');
-    setTimeout(function () {
+    setTimeout(function() {
       submenu.addClass('active');
     }, time);
-    setTimeout(function () {
+    setTimeout(function() {
       submenu.addClass('pad10')
       submenu.find('.searchPage').css({
         'display': 'block'

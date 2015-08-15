@@ -4,46 +4,54 @@ var SearchView = Backbone.View.extend({
     'click #start': 'getPoints',
     'click #search': 'setPoints',
     'click #clear': 'clear',
-    'click #here': 'getPosition'
+    'click #here': 'getPosition',
+    'click #delete': 'clearMap'
   },
   template: _.template('<div class="searchPage">' +
                           '<div class="autocomplete">' +
                             '<p>SEARCH</p>' +
                             '<div>' +
                               '<label for="id">from</label>' +
-                              '<input type="text" id="from" name="from" class="txt" require />' +
+                              '<input type="text" id="from" name="from" class="txt" />' +
                             '</div>' +
-                            /*'<div class="change">' +
-                              '<input type="button" value="change" id="change" name="change" class="btn btn-default" />' +
-                            '</div>' +*/
                             '<div>' +
                               '<label for="to">to</label>' +
-                              '<input type="text" id="to" name="to" class="txt" value="<% this.fieldto %>" require />' +
+                              '<input type="text" id="to" name="to" class="txt" />' +
+                              //'<input type="text" id="to" name="to" class="txt" value="<% this.fieldto %>" />' +
                             '</div>' +
                             '<div class="right">' +
                               '<input type="button" id="clear" name="clear" class="btn btn-default" value="clear" />' +
-                              '<input type="submit" id="search" name="search" class="btn btn-default" value="search"  />' +
+                              '<input type="button" id="search" name="search" class="btn btn-default" value="search"  />' +
                             '</div>' +
                           '</div>' +
                           '<div class="click">' +
                             '<p>Where I am?<p>' +
                             '<input type="button" id="here" name="here" class="btn btn-default" value="Here!">' +
-                            '<p>' +
-                              '<img src="img/alert.png"> You can doble click on two points to find your way:' +
+                            '<div>' +
+                              '<p>' +
+                                '<img src="img/alert.png"> You can doble click on two points to find your way:' +
+                              '</p>' +
                               '<input type="button" id="start" name="start" class="dbl btn btn-default" value="start">' +
-                            '</p>' +
+                              '<p> You can delete all markers on the map:</p>' +
+                              '<input type="button" id="delete" name="delete" class="dbl btn btn-default" value="delete">' +
+                            '</div>' +
                           '</div>' +
-                        '</form>'),
+                          '<div class="info">' +
+                          '</div>' +
+                        '</div>'),
   busStopArray: [],
-  fieldfrom: '',
-  fieldto: '',
+  //fieldfrom: '',
+  //fieldto: '',
   busStopMarkers: [],
-  markers: [],
+  //markers: [],
+  listener: null,
   initialize: function() {
     var that = this;
     this.fetch('http://localhost:8080/api/routes', that.setBusStopArray);
-    this.$el.html(this.template);
+    this.$el.append(this.template);
     this.autocompleteListener();
+    this.markers = [];
+    this.circles = [];
   },
   isInLviv: function(position){
     var isOnCircle,
@@ -163,6 +171,10 @@ var SearchView = Backbone.View.extend({
     markers = [];
     return markers;
   },
+  clearMap: function(){
+    this.markers = this.deleteMarkers(this.markers);
+    this.circles = this.deleteMarkers(this.circles);
+  },
   setCircleOptions: function(map, position, radius, isVisible){
     return {
         map: map,
@@ -181,6 +193,7 @@ var SearchView = Backbone.View.extend({
       busStopArray = this.getBusStopArray();
     this.setMarkers(position);
     var circle = new google.maps.Circle(circleOptions);
+    this.circles.push(circle);
     while (!nearestBusStop) {
       this.getBusStopMarkers().forEach(function(el, i) {
         if (circle.getBounds().contains(el.getPosition())) {
@@ -203,6 +216,7 @@ var SearchView = Backbone.View.extend({
     this.setMarkers(position);
     var busStopArray = this.getBusStopArray();
     var circle = new google.maps.Circle(circleOptions);
+    this.circles.push(circle);
     this.getBusStopMarkers().forEach(function(el, i) {
       if (circle.getBounds().contains(el.getPosition())) {
         that.setMarkers(busStopArray[i]);
@@ -220,6 +234,7 @@ var SearchView = Backbone.View.extend({
   },
   getBusNumbers: function(busStopsFrom, busStopsTo){
     var buses = [],
+      info,
       busesNotCross = [];
     busStopsFrom.forEach(function(from) {
       from.route.forEach(function(routeNumber){
@@ -241,6 +256,11 @@ var SearchView = Backbone.View.extend({
     });
     if (buses.length === 0) {
       buses = busesNotCross;
+      info = buses.join(', ');
+      this.$el.find('.info').append('There are no direct buses. You need to get the following buses: ' + info);
+    } else {
+      info = buses.join(', ');
+      this.$el.find('.info').append('You can get from one point to another by the next buses ' + info);
     };
     console.log(buses);
     /*buses.forEach(function(routeNumber){
@@ -248,6 +268,7 @@ var SearchView = Backbone.View.extend({
     })*/
   },
   getPoints: function(){
+    this.$el.parent().find('.search').addClass('dblclicked');
     var that = this,
       amount = 0,
       busStopsArray = [],
@@ -258,18 +279,19 @@ var SearchView = Backbone.View.extend({
       disableDoubleClickZoom: true
     });
     menuView.hidePage();
-    var listener = google.maps.event.addListener(map, 'dblclick', function(e) {
+    this.listener = google.maps.event.addListener(map, 'dblclick', function(e) {
       if(that.isInLviv(e.latLng)){
         amount++;
         busStopsArray.push(that.getRequiredBusStops(e.latLng));
         if (amount == 2) {
-          google.maps.event.removeListener(listener);
+          google.maps.event.removeListener(that.listener);
           that.busStopMarkers = that.deleteMarkers(that.busStopMarkers);
           //map.setZoom(zoom);
           that.getBusNumbers(busStopsArray[0], busStopsArray[1]);
           map.setOptions({
             disableDoubleClickZoom: false
           });
+          that.$el.parent().find('.search').removeClass('dblclicked');
         }
       } else {
         alert('This place is not in Lviv. Please choose another!');
