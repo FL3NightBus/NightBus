@@ -33,17 +33,22 @@ html, body, #map {
 }
 .button {
 	float: left;
-	display: inline-block;
 	width: 25%;
-	padding: 18px 0;
+	vertical-align: middle;  
 	height: 100%;
 	
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	
-	text-align: center;
-	z-index: 1; 
+	z-index: 1;
+	img {
+		position: relative;
+		display: block;
+		top: 50%;
+		left: 50%;
+		margin-left: -32px;
+		margin-top: -32px;
+	}
 }
 #footer{
 	position: absolute;
@@ -58,7 +63,7 @@ html, body, #map {
 }
 .submenu {
 	position: absolute;
-	top: 100px;
+	top: 15%;
 	width: 100%;
 	height: 0;
 	clear: both;
@@ -67,9 +72,9 @@ html, body, #map {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	
-	-moz-transition: height 2s; /* Firefox 4 */
-	-webkit-transition: height 2s; /* Safari and Chrome */
-	-o-transition: height 2s; /* Opera */
+	-moz-transition: height 1s; /* Firefox 4 */
+	-webkit-transition: height 1s; /* Safari and Chrome */
+	-o-transition: height 1s; /* Opera */
 	opacity: 0.8;
 	
 	background-color: $submenu;
@@ -166,7 +171,7 @@ html, body, #map {
 		text-align: center;
 		height: 100%;
 		.button + .button {
-			border-top: solid 3px #ffce43;
+			border-left: none;
 		}
 	}
 	.page {
@@ -180,11 +185,17 @@ html, body, #map {
 		background: $button; 
 	}
 	.button {
-		height: auto;
-		padding: 18px 0;
 		float: none;
 		display: block;
+		height: 100px;
 		width: 100%;
+		padding: 18px; 
+		border-bottom: solid 3px #ffce43;
+		img {
+			top: 0;
+			left: 0;
+			margin: 0;
+		}
 	}
 	#footer{
 		right: 0;
@@ -198,9 +209,9 @@ html, body, #map {
 		width: 0;
 		opacity: 1;
 		background-color: $submenuDesktop;
-		-moz-transition: width 2s; /* Firefox 4 */
-		-webkit-transition: width 2s; /* Safari and Chrome */
-		-o-transition: width 2s; /* Opera */
+		-moz-transition: width 1s; /* Firefox 4 */
+		-webkit-transition: width 1s; /* Safari and Chrome */
+		-o-transition: width 1s; /* Opera */
 		div {
 			margin: 10px 0;
 		}

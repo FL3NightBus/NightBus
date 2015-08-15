@@ -3,9 +3,10 @@ var SearchView = Backbone.View.extend({
   events: {
     'click #start': 'getPoints',
     'click #search': 'setPoints',
-    'click #clear': 'clear'
+    'click #clear': 'clear',
+    'click #here': 'getPosition'
   },
-  template: _.template('<form class="searchPage">' +
+  template: _.template('<div class="searchPage">' +
                           '<div class="autocomplete">' +
                             '<p>SEARCH</p>' +
                             '<div>' +
@@ -41,9 +42,27 @@ var SearchView = Backbone.View.extend({
   initialize: function() {
     var that = this;
     this.fetch('http://localhost:8080/api/routes', that.setBusStopArray);
-    google.maps.event.addDomListener(window, 'load', this.mapInitialize);
     this.$el.html(this.template);
     this.autocompleteListener();
+  },
+  isInLviv: function(position){
+    var isOnCircle,
+      map = menuView.getMap(),
+      center = {
+        lat: 49.827145,
+        lng: 24.026072
+      },
+      circleOption = this.setCircleOptions(map, center, 9000, false),
+      circle = new google.maps.Circle(circleOption),
+      marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        visible: false
+      });
+      isOnCircle = circle.getBounds().contains(marker.getPosition());
+      marker.setMap(null);
+      marker = null;
+      return isOnCircle;
   },
   fetch: function(url, callback){
     var that=this;
@@ -62,6 +81,10 @@ var SearchView = Backbone.View.extend({
   clear: function(){
     this.$el.find(from).val('');
     this.$el.find(to).val('');
+  },
+  getPosition: function(){
+    menuView.hidePage();
+    menuView.getYourPosition();
   },
   busStopCoordinateComparison: function(routeCoord, busStopCoord1, busStopArray){
     for (var i = 0, len = busStopArray.length; i < len; i++) {
@@ -111,6 +134,7 @@ var SearchView = Backbone.View.extend({
   },
   setBusStopMarkers: function(){
     var that = this,
+      map = menuView.getMap();
       busStopArray = this.getBusStopArray();
     busStopArray.forEach(function(el) {
       that.busStopMarkers.push(new google.maps.Marker({
@@ -124,7 +148,8 @@ var SearchView = Backbone.View.extend({
     return this.busStopMarkers;
   },
   setMarkers: function(position){
-    var that = this;
+    var that = this,
+      map = menuView.getMap();
     that.markers.push(new google.maps.Marker({
       position: position,
       map: map,
@@ -150,10 +175,11 @@ var SearchView = Backbone.View.extend({
     var nearestBusStop,
       pos,
       distance,
-      radius = 0,
-      circleOptions = this.setCircleOptions(map, position, radius, true);
-      this.setMarkers(position);
+      radius = 0, 
+      map = menuView.getMap(),
+      circleOptions = this.setCircleOptions(map, position, radius, true),
       busStopArray = this.getBusStopArray();
+    this.setMarkers(position);
     var circle = new google.maps.Circle(circleOptions);
     while (!nearestBusStop) {
       this.getBusStopMarkers().forEach(function(el, i) {
@@ -172,8 +198,8 @@ var SearchView = Backbone.View.extend({
   getBusStopsInRadius: function(position, radius){
     var busStopInRadius = [],
       that = this,
+      map = menuView.getMap(),
       circleOptions = this.setCircleOptions(map, position, radius, false);
-
     this.setMarkers(position);
     var busStopArray = this.getBusStopArray();
     var circle = new google.maps.Circle(circleOptions);
@@ -218,13 +244,14 @@ var SearchView = Backbone.View.extend({
     };
     console.log(buses);
     /*buses.forEach(function(routeNumber){
-      pv.passPoliline(routeNumber);
+      polyline.drawPoliline(routeNumber);
     })*/
   },
   getPoints: function(){
-    var amount = 0,
+    var that = this,
+      amount = 0,
       busStopsArray = [],
-      that = this;
+      map = menuView.getMap();
     this.setBusStopMarkers();
     //var zoom = map.getZoom();
     map.setOptions({
@@ -232,26 +259,38 @@ var SearchView = Backbone.View.extend({
     });
     menuView.hidePage();
     var listener = google.maps.event.addListener(map, 'dblclick', function(e) {
-      amount++;
-      busStopsArray.push(that.getRequiredBusStops(e.latLng));
-      if (amount == 2) {
-        google.maps.event.removeListener(listener);
-        that.busStopMarkers = that.deleteMarkers(that.busStopMarkers);
-        //map.setZoom(zoom);
-        that.getBusNumbers(busStopsArray[0], busStopsArray[1]);
-        map.setOptions({
-          disableDoubleClickZoom: false
-        });
+      if(that.isInLviv(e.latLng)){
+        amount++;
+        busStopsArray.push(that.getRequiredBusStops(e.latLng));
+        if (amount == 2) {
+          google.maps.event.removeListener(listener);
+          that.busStopMarkers = that.deleteMarkers(that.busStopMarkers);
+          //map.setZoom(zoom);
+          that.getBusNumbers(busStopsArray[0], busStopsArray[1]);
+          map.setOptions({
+            disableDoubleClickZoom: false
+          });
+        }
+      } else {
+        alert('This place is not in Lviv. Please choose another!');
       }
     });
   },
   setPoints: function(){
-    menuView.hidePage();
-    this.setBusStopMarkers();
-    console.log(this.fieldfrom);
-    var busStopsFrom = this.getRequiredBusStops(this.fieldfrom);
-    var busStopsTo = this.getRequiredBusStops(this.fieldto);
-    this.busStopMarkers = this.deleteMarkers(this.busStopMarkers);
-    this.getBusNumbers(busStopsFrom, busStopsTo);
+    if(this.isInLviv(this.fieldfrom)) {
+      if(this.isInLviv(this.fieldto)) {
+        menuView.hidePage();
+        this.setBusStopMarkers();
+        console.log(this.fieldfrom);
+        var busStopsFrom = this.getRequiredBusStops(this.fieldfrom);
+        var busStopsTo = this.getRequiredBusStops(this.fieldto);
+        this.busStopMarkers = this.deleteMarkers(this.busStopMarkers);
+        this.getBusNumbers(busStopsFrom, busStopsTo);
+      } else {
+        alert('The place "To" is not in Lviv. Please tipe another address!');
+      }
+    } else {
+      alert('The place "From" is not in Lviv. Please tipe another address!');
+    }
   }
 });
