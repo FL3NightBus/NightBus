@@ -25,6 +25,8 @@
       <div class="submenu borderless"></div>
     </div>
 
+    <div id='checkmenu'></div>
+
     <div id="footer"></div>
   </body>
   <script src="lib/jquery.min.js"></script>
@@ -32,4 +34,36 @@
   <script src="lib/backbone.js"></script>
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry&libraries=places&sensor=false"></script>
   <script src="js/app.js"> </script>
+
+  <script type="tmpl/html" id="checkmenu-template"> 
+    <form action="#" id='form'>
+      <label class="rout" for="1">Route 1H</label>
+      <input type="checkbox" id="1"><br>
+      <label class="rout" for="2">Route 2H</label>
+      <input type="checkbox" id="2"><br>
+      <label class="rout" for="3">Route 3H</label>
+      <input type="checkbox" id="3"><br>
+      <label class="rout" for="4">Route 4H</label>
+      <input type="checkbox" id="4"><br>
+      <label class="rout" for="5">Route 5H</label>
+      <input type="checkbox" id="5"><br>
+      <label class="rout"for="6">Route 6H</label>
+      <input  type="checkbox" id="6"><br>      
+      <label class="rout" for="7">Route 7H</label>
+      <input type="checkbox" id="7"><br>
+      <label for="interval">Set time interval (in seconds)</label>
+      <input type="number" id="interval">
+      <button id="location">Were I am?</button>
+    </form> 
+    <div id="polylines">
+      <label><input id="1Н" type="checkbox"><span>1Н</span></label>
+      <label><input id="2Н" type="checkbox"><span>2Н</span></label>
+      <label><input id="3Н" type="checkbox"><span>3Н</span></label>
+      <label><input id="4Н" type="checkbox"><span>4Н</span></label>
+      <label><input id="5Н" type="checkbox"><span>5Н</span></label>
+      <label><input id="6Н" type="checkbox"><span>6Н</span></label>
+      <label><input id="7Н" type="checkbox"><span>7Н</span></label>
+   </div>  
+  </script>
+  
 </html>
