@@ -1,96 +1,27 @@
-var map;
-var MenuView = Backbone.View.extend({
-  el: $('#nav'),
-  events:{
-    'click .search': 'createSearch',
-    'click .chat': 'createChat'
-  },
-  searchView: null,
-  chatView: null,
-  initialize: function() {
-    var that = this;
-    google.maps.event.addDomListener(window, 'load', this.mapInitialize);
-  },
-  mapInitialize: function() {
-    var myLatlng = {
-        lat: 49.87141,
-        lng: 24.058568
-      },
-      mapOptions = {
-        center: myLatlng,
-        zoom: 10
-      };
-    map = new google.maps.Map(document.getElementById('map'), mapOptions);
-    geocoder = new google.maps.Geocoder();
-  },
-  createSearch: function(){
-    var that = this;
-    if(!this.searchView){
-      this.searchView = new SearchView();
-    };
-    if(!this.$el.find('.search').hasClass('clicked')) {
-      that.render('.search');
-    };
-  },
-  createChat: function(){
-    if(!this.searchView){
-      this.searchView = new SearchView();
-    };
-    if(!this.$el.find('.chat').hasClass('clicked')) {
-      this.render('.chat');
-    }
-  },
-  hidePage: function(){
-    var that = this;
-    var time = 0;
-    submenu = that.$el.parent().find('.submenu');
-    submenu.find('.searchPage').css({'display': 'none'});
-    if(submenu.hasClass('active')){
-      submenu.removeClass('active pad10');
-      time = 2000;
-    };
-    that.$el.find('.clicked').removeClass('clicked');
-    return time;
-  },
-  render: function(pageClass) {
-    var that = this;
-    var submenu = this.$el.parent().find('.submenu');
-    var time = this.hidePage();
-    this.$el.find(pageClass).addClass('clicked');
-    setTimeout(function(){
-      submenu.addClass('active');
-    }, time);
-    setTimeout(function(){
-      submenu.addClass('pad10')
-      submenu.find('.searchPage').css({'display': 'block'});
-    }, time + 2000);
-  }
-});
-
-
 var SearchView = Backbone.View.extend({
   el: $('.submenu'),
   events: {
     'click #start': 'getPoints',
-    'click #search': 'setPoints'
+    'click #search': 'setPoints',
+    'click #clear': 'clear'
   },
-  template: _.template('<div class="searchPage">' +
+  template: _.template('<form class="searchPage">' +
                           '<div class="autocomplete">' +
                             '<p>SEARCH</p>' +
                             '<div>' +
                               '<label for="id">from</label>' +
-                              '<input type="text" id="from" name="from" class="txt" />' +
+                              '<input type="text" id="from" name="from" class="txt" require />' +
                             '</div>' +
                             /*'<div class="change">' +
                               '<input type="button" value="change" id="change" name="change" class="btn btn-default" />' +
                             '</div>' +*/
                             '<div>' +
                               '<label for="to">to</label>' +
-                              '<input type="text" id="to" name="to" class="txt" value="<% this.fieldto %>" />' +
+                              '<input type="text" id="to" name="to" class="txt" value="<% this.fieldto %>" require />' +
                             '</div>' +
                             '<div class="right">' +
                               '<input type="button" id="clear" name="clear" class="btn btn-default" value="clear" />' +
-                              '<input type="button" id="search" name="search" class="btn btn-default" value="search"  />' +
+                              '<input type="submit" id="search" name="search" class="btn btn-default" value="search"  />' +
                             '</div>' +
                           '</div>' +
                           '<div class="click">' +
@@ -101,7 +32,7 @@ var SearchView = Backbone.View.extend({
                               '<input type="button" id="start" name="start" class="dbl btn btn-default" value="start">' +
                             '</p>' +
                           '</div>' +
-                        '</div>'),
+                        '</form>'),
   busStopArray: [],
   fieldfrom: '',
   fieldto: '',
@@ -127,6 +58,10 @@ var SearchView = Backbone.View.extend({
         console.log('request error');
       }
     });
+  },
+  clear: function(){
+    this.$el.find(from).val('');
+    this.$el.find(to).val('');
   },
   busStopCoordinateComparison: function(routeCoord, busStopCoord1, busStopArray){
     for (var i = 0, len = busStopArray.length; i < len; i++) {
@@ -282,6 +217,9 @@ var SearchView = Backbone.View.extend({
       buses = busesNotCross;
     };
     console.log(buses);
+    /*buses.forEach(function(routeNumber){
+      pv.passPoliline(routeNumber);
+    })*/
   },
   getPoints: function(){
     var amount = 0,
@@ -317,4 +255,3 @@ var SearchView = Backbone.View.extend({
     this.getBusNumbers(busStopsFrom, busStopsTo);
   }
 });
-var menuView = new MenuView();
