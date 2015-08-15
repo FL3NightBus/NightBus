@@ -32,7 +32,7 @@ var BusStopView = Backbone.View.extend({
 
     initialize: function() {
       this.map = mapView.getMap();
-      this.response = pv.getResponse();
+      this.response = polyline.getResponse();
       this.stop = setBusStopArray(this.response);
       this.markers = [];
       this.greateMarkerArray();
