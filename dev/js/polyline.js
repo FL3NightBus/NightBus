@@ -20,13 +20,13 @@ var MapView = Backbone.View.extend({
 
 
     this.poliArray = {
-      '1Н': new google.maps.Polyline(polyOptions),
-      '2Н': new google.maps.Polyline(polyOptions),
-      '3Н': new google.maps.Polyline(polyOptions),
-      '4Н': new google.maps.Polyline(polyOptions),
-      '5Н': new google.maps.Polyline(polyOptions),
-      '6Н': new google.maps.Polyline(polyOptions),
-      '7Н': new google.maps.Polyline(polyOptions)
+      '1H': new google.maps.Polyline(polyOptions),
+      '2H': new google.maps.Polyline(polyOptions),
+      '3H': new google.maps.Polyline(polyOptions),
+      '4H': new google.maps.Polyline(polyOptions),
+      '5H': new google.maps.Polyline(polyOptions),
+      '6H': new google.maps.Polyline(polyOptions),
+      '7H': new google.maps.Polyline(polyOptions)
     };
 
     this.render();
