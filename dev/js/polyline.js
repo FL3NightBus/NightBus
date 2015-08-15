@@ -94,7 +94,7 @@ var PoliView = Backbone.View.extend({
     var coords = [];
 
     switch (waynumber) {
-      case '1Н':
+      case '1H':
         {
           coords = this.getCoords(5);
           this.poliarr[waynumber].setOptions({
@@ -104,7 +104,7 @@ var PoliView = Backbone.View.extend({
           break;
         }
 
-      case '2Н':
+      case '2H':
         {
           coords = this.getCoords(6);
           this.poliarr[waynumber].setOptions({
@@ -114,7 +114,7 @@ var PoliView = Backbone.View.extend({
           break;
         }
 
-      case '3Н':
+      case '3H':
         {
           coords = this.getCoords(0);
           this.poliarr[waynumber].setOptions({
@@ -124,7 +124,7 @@ var PoliView = Backbone.View.extend({
           break;
         }
 
-      case '4Н':
+      case '4H':
         {
           coords = this.getCoords(1);
           this.poliarr[waynumber].setOptions({
@@ -134,7 +134,7 @@ var PoliView = Backbone.View.extend({
           break;
         }
 
-      case '5Н':
+      case '5H':
         {
           coords = this.getCoords(2);
           this.poliarr[waynumber].setOptions({
@@ -144,7 +144,7 @@ var PoliView = Backbone.View.extend({
           break;
         }
 
-      case '6Н':
+      case '6H':
         {
           coords = this.getCoords(4);
           this.poliarr[waynumber].setOptions({
@@ -154,7 +154,7 @@ var PoliView = Backbone.View.extend({
           break;
         }
 
-      case '7Н':
+      case '7H':
         {
           coords = this.getCoords(3);
           this.poliarr[waynumber].setOptions({
