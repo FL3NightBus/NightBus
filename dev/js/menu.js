@@ -119,7 +119,9 @@ var MenuView = Backbone.View.extend({
     if (!this.onLineTraffic) {
       this.onLineTraffic = new OnLineTrafficView();
     };
-    if (!this.$el.find('.onLineTraffic').hasClass('clicked')) {
+    if (this.$el.find('.onLineTraffic').hasClass('clicked')) {
+      this.hidePage();
+    } else {
       this.render('.onLineTraffic');
     }
   },
@@ -127,7 +129,7 @@ var MenuView = Backbone.View.extend({
     var that = this;
     var time = 0;
     submenu = that.$el.parent().find('.submenu');
-    submenu.find('.searchPage').css({
+    submenu.find('.page').css({
       'display': 'none'
     });
     if (submenu.hasClass('active')) {
@@ -141,7 +143,7 @@ var MenuView = Backbone.View.extend({
     var that = this;
     var submenu = this.$el.parent().find('.submenu');
     var time = this.hidePage();
-    if (this.searchView.listener) {
+    if (pageClass == '.search' && this.searchView.listener) {
       google.maps.event.removeListener(this.searchView.listener);
       this.map.setOptions({
         disableDoubleClickZoom: false
@@ -157,7 +159,7 @@ var MenuView = Backbone.View.extend({
     }, time);
     setTimeout(function () {
       submenu.addClass('pad10')
-      submenu.find('.searchPage').css({
+      submenu.find(pageClass + 'Page').css({
         'display': 'block'
       });
     }, time + 1000);

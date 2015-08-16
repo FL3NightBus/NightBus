@@ -7,7 +7,7 @@ var SearchView = Backbone.View.extend({
     'click #here': 'getPosition',
     'click #delete': 'clearMap'
   },
-  template: _.template('<div class="searchPage">' +
+  template: _.template('<div class="page searchPage">' +
                           '<div class="autocomplete">' +
                             '<p>SEARCH</p>' +
                             '<div>' +
