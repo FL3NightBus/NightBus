@@ -101,7 +101,7 @@ var OnLineTrafficView = Backbone.View.extend({
   firstRequest: function (bus) {
     var that = this,
       map = menuView.getMap(),
-      url = 'https://last.localtunnel.me/api/routes?route=' + bus + 'H';
+      url = 'http://localhost:8080/api/routes?route=' + bus + 'H';
     that.setMarkers(bus, []);
     that.fetch(url, that.getFirstCoordinates, bus);
   },
@@ -140,7 +140,7 @@ var OnLineTrafficView = Backbone.View.extend({
     that.setMarkers(bus, []);
     // time - number of miliseconds for setInterval to get data from server and render it on Map
     var time = interval * 1000,
-      url = 'https://last.localtunnel.me/api/routes?route=' + bus + 'H';
+      url = 'http://localhost:8080/api/routes?route=' + bus + 'H';
     var timer = setInterval(function () {
       // this GET allow us get a coordinates from server and send them to setMerker();
       // also we can get a coordinats for few buses. So we should be ready to support all of them 
