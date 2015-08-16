@@ -9,13 +9,12 @@ var OnLineTrafficView = Backbone.View.extend({
 
     this.response = [];
     this.setResponse();
-    this.poliarr = menuView.getPoliArray();
 
   },
   render: function () {
     var tmplHTML = $("#checkmenu-template").text();
     var tmpl = _.template(tmplHTML);
-    $('.submenu').html(tmpl);
+    $('.submenu').append(tmpl);
     //   this.clicker();
   },
   el: '.submenu',
@@ -317,7 +316,7 @@ var OnLineTrafficView = Backbone.View.extend({
 
 
   getPoli: function (waynumber) {
-
+    this.poliarr = menuView.getPoliArray();
     var coords = [];
 
     switch (waynumber) {

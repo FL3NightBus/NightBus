@@ -263,9 +263,9 @@ var SearchView = Backbone.View.extend({
       this.$el.find('.info').append('You can get from one point to another by the next buses ' + info);
     };
     console.log(buses);
-    /*buses.forEach(function(routeNumber){
-      polyline.drawPoliline(routeNumber);
-    })*/
+    buses.forEach(function(routeNumber){
+      menuView.onLineTraffic.drawPoliline(routeNumber);
+    })
   },
   getPoints: function(){
     this.$el.parent().find('.search').addClass('dblclicked');

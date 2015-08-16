@@ -1,9 +1,9 @@
 var MenuView = Backbone.View.extend({
   el: $('#nav'),
   events: {
-    'click .search': 'createSearch',
-    'click .chat': 'createChat',
-    'click .onLineTraffic': 'createOnLineTraffic'
+    'click .search': 'renderSearch',
+    'click .chat': 'renderChat',
+    'click .onLineTraffic': 'renderOnLineTraffic'
   },
   searchView: null,
   chatView: null,
@@ -47,6 +47,12 @@ var MenuView = Backbone.View.extend({
 
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
     this.getGeoLocation();
+    this.getInstance();
+  },
+  getInstance: function(){
+    this.searchView = new SearchView();
+    //chatView = new ChatView();
+    this.onLineTraffic = new OnLineTrafficView();
   },
   getMap: function () {
     return this.map;
@@ -97,28 +103,21 @@ var MenuView = Backbone.View.extend({
   getYourPosition: function () {
     return this.yourPosition;
   },
-  createSearch: function () {
-    if (!this.searchView) {
-      this.searchView = new SearchView();
-    };
+  renderSearch: function () {
     if (this.$el.find('.search').hasClass('clicked')) {
       this.hidePage();
     } else {
       this.render('.search');
     }
   },
-  createChat: function () {
-    if (!this.searchView) {
-      this.searchView = new SearchView();
-    };
+  renderChat: function () {
     if (!this.$el.find('.chat').hasClass('clicked')) {
+      this.hidePage();
+    } else {
       this.render('.chat');
     }
   },
-  createOnLineTraffic: function () {
-    if (!this.onLineTraffic) {
-      this.onLineTraffic = new OnLineTrafficView();
-    };
+  renderOnLineTraffic: function () {
     if (this.$el.find('.onLineTraffic').hasClass('clicked')) {
       this.hidePage();
     } else {
