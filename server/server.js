@@ -27,31 +27,48 @@ router.use(function(req, res, next) {
 });
 //----------------comments-----------------
 router.route('/comments')
-  // create a new instance (accessed at GET http://localhost:8080/api/comments)
-  .get(function(req, res) {
-    Comments.find(function(err, comments) {
-      if (err) res.send(err);
-      res.jsonp(comments);
-    });
-  })
-  .post(function(req, res) {
-    var comment = new Comments(); // create a new instance of the Comments model
-    comment.comments = req.query.comment; // set the routes name (comes from the request)
-    comment.name = req.query.name;
-    comment.time = req.query.time;
-    comment.icon = req.query.icon;
-    comment.save(function(err) {
-      if (err) {
-        res.send(err);
-      }
-      res.json({
-        message: 'Comment created!'
-      });
+// create a new instance (accessed at GET http://localhost:8080/api/comments)
+.get(function(req, res) {
+  Comments.find(function(err, comments) {
+    if (err) res.send(err);
+    res.jsonp(comments);
+  });
+}).post(function(req, res) {
+  var comment = new Comments(); // create a new instance of the Comments model
+  comment.comments = req.query.comment; // set the routes name (comes from the request)
+  comment.name = req.query.name;
+  comment.time = req.query.time;
+  comment.icon = req.query.icon;
+  comment.save(function(err) {
+    if (err) {
+      res.send(err);
+    }
+    res.json({
+      message: 'Comment created!'
     });
   });
+});
 // --------------routes--------------------------------------
 var routesCoordinates = {};
 router.route('/routes').get(function(req, res) {
+  if (req.query.info == 'all') {
+    Route.find(function(err, info) {
+      if (err) res.send(err);
+      var infoObject = {};
+      info.forEach(function(el) {
+        infoObject[el.name] = {
+          route: el.info.route,
+          way: el.info.way,
+          price: el.info.price,
+          interval: el.info.interval,
+          time: el.info.time,
+          sw: el.info.sw,
+          bw: el.info.bw
+        }
+      });
+      res.jsonp(infoObject);
+    });
+  };
   if (req.query.route) {
     var count = 2, //bus count
       arrOfCoordinates = [];
@@ -93,18 +110,6 @@ router.route('/routes').get(function(req, res) {
     });
   }
 });
-/*.put(function(req, res) {
-  Route.findById(req.params.id, function(err, rout) {
-    if (err) res.send(err);
-    rout.name = req.body.name;
-    rout.save(function(err) {
-      if (err) res.send(err);
-      res.json({
-        message: 'Route updated!'
-      });
-    });
-  });
-});*/
 setInterval(function() {
   for (i in routesCoordinates) {
     routesCoordinates[i]++;
