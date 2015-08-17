@@ -200,11 +200,12 @@ var SearchView = Backbone.View.extend({
   getBusNumbers: function(busStopsFrom, busStopsTo) {
     var buses = [],
       info,
-      busesNotCross = [];
+      busesNotCrossFrom = [],
+      busesNotCrossTo = [];
     busStopsFrom.forEach(function(from) {
       from.route.forEach(function(routeNumber) {
-        if (busesNotCross.indexOf(routeNumber) == -1) {
-          busesNotCross.push(routeNumber);
+        if (busesNotCrossFrom.indexOf(routeNumber) == -1) {
+          busesNotCrossFrom.push(routeNumber);
         }
       });
       busStopsTo.forEach(function(to) {
@@ -213,19 +214,19 @@ var SearchView = Backbone.View.extend({
             if (buses.indexOf(routeNumber) == -1) {
               buses.push(routeNumber);
             }
-          } else if (busesNotCross.indexOf(routeNumber) == -1) {
-            busesNotCross.push(routeNumber);
+          } else if (busesNotCrossTo.indexOf(routeNumber) == -1) {
+            busesNotCrossTo.push(routeNumber);
           }
         })
       })
     });
     if (buses.length === 0) {
-      buses = busesNotCross;
       info = buses.join(', ');
-      this.$el.find('.info').append('There are no direct buses. You need to get the following buses: ' + info);
+      this.$el.find('.info').append('<p>There are no direct buses. First you nead to take ' + busesNotCrossFrom.join(', ') + ' and then change to ' + busesNotCrossTo.join(', ') + '.</p>');
+      buses = busesNotCrossFrom.concat(busesNotCrossTo);
     } else {
       info = buses.join(', ');
-      this.$el.find('.info').append('You can get from one point to another by the next buses ' + info);
+      this.$el.find('.info').append('<p>You can get from one point to another by the next buses ' + info + '.</p>');
     };
     buses.forEach(function(routeNumber) {
       menuView.onLineTraffic.drawPoliline(routeNumber);
