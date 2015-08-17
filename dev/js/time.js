@@ -1,36 +1,11 @@
-/*function setBusStopArray(arrayOfCoordinates) {
-  var busStopArray = [];
-  arrayOfCoordinates.forEach(function(el1) {
-    el1.routeArray.forEach(function(el2) {
-      if (el2.busStop) {
-        for (var i = 0, len = busStopArray.length; i < len; i++) {
-          var el3 = busStopArray[i];
-          if (el2.busStop == el3.busStop && el2.lat == el3.lat && el2.lng == el3.lng) {
-            if (busStopArray[i].route.indexOf(el1.name) == -1) {
-              busStopArray[i].route.push(el1.name);
-            }
-            break;
-          } else if (i == len - 1) {
-            busStopArray.push(el2);
-            busStopArray[i + 1].route = [el1.name];
-          }
-        }
-        if (!len) {
-          busStopArray.push(el2);
-          busStopArray[0].route = [el1.name];
-        };
-      }
-    })
-  });
-  return busStopArray;
-};*/
-
 
 
 /*=============== Works with markers ==============*/
 var BusStopView = Backbone.View.extend({
 
     initialize: function() {
+      var that = this;
+      that.response = menuView.onLineTraffic.getResponse();
       this.map = menuView.getMap();
       this.stop = menuView.searchView.getBusStopArray();
       this.markers = [];
@@ -107,7 +82,7 @@ var BusStopView = Backbone.View.extend({
     checkBusName: function(busNameArray, contentString, myCoordOfStop) {
       that = this;
       busNameArray.forEach(function(el) { //для кожного ім*я автобуса
-          if ($('#' + el + ':checked').val()) {
+          if ($('#' + el[0]+ ':checked').val()) {
             var myroute = []; //array обєктів координат
             that.response.forEach(function(obj) {
               if (obj.name == el) {
@@ -115,7 +90,7 @@ var BusStopView = Backbone.View.extend({
               }
             })
             var indexOfBusStop = that.getIndexOfBusStop(myCoordOfStop, myroute);//!!!!
-            var activeBusCoords = formView.getBusArray(el); //координати активних автобуса
+            var activeBusCoords = menuView.onLineTraffic.getBusArray(el[0]);//координати активних автобуса
             //console.log('here is trouble')
             var busesIndexes = that.getBusesIndex(activeBusCoords, myroute);
             //console.log('indexOfBusStop' + indexOfBusStop);
@@ -127,10 +102,10 @@ var BusStopView = Backbone.View.extend({
             var time;
             if (max < indexOfBusStop) {
               //console.log("Скільки точок? " + (indexOfBusStop - max));
-              time = (indexOfBusStop - max - 1) * 3;
+              time = (indexOfBusStop - max - 1) * 5;
             } else if (max > indexOfBusStop) {
               //console.log("Скільки точок? " + (myroute.length - (max - indexOfBusStop)));
-              time = (myroute.length - 1 - (max - indexOfBusStop - 1)) * 3; //тут 3 секунди - бо 3 секунди на серері
+              time = (myroute.length - 1 - (max - indexOfBusStop - 1)) * 5; //тут 3 секунди - бо 3 секунди на серері
             }
             console.log('time is: ' + time);
             that.contentString += "<p>" + el + " : " + time + "</p>";
@@ -178,4 +153,4 @@ var BusStopView = Backbone.View.extend({
       }
 });
 
-var bsv = new BusStopView();
+//var bsv = new BusStopView();
