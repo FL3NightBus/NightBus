@@ -1,30 +1,48 @@
-var onLineTrafficViewTemplate = '<div class="page onLineTrafficPage">' + 
-      '<form action="#" id="form">' +
-        '<label class="rout" for="1">Route 1H</label>' +
-        '<input type="checkbox" id="1"><br>' +
-        '<label class="rout" for="2">Route 2H</label>' +
-        '<input type="checkbox" id="2"><br>' +
-        '<label class="rout" for="3">Route 3H</label>' +
-        '<input type="checkbox" id="3"><br>' +
-        '<label class="rout" for="4">Route 4H</label>' +
-        '<input type="checkbox" id="4"><br>' +
-        '<label class="rout" for="5">Route 5H</label>' +
-        '<input type="checkbox" id="5"><br>' +
-        '<label class="rout"for="6">Route 6H</label>' +
-        '<input  type="checkbox" id="6"><br>' +
-        '<label class="rout" for="7">Route 7H</label>' +
-        '<input type="checkbox" id="7"><br>' +
-        '<label for="interval">Set time interval (in seconds)</label>' +
-        '<input type="number" id="interval">' +
+var onLineTrafficViewTemplate = '<div class="page onLineTrafficPage">' +
+        '<form action="#" id="form">' +
+          '<input class="busInput" type="checkbox" id="1">' +
+          '<input class="busInput" type="checkbox" id="2">' +
+          '<input class="busInput" type="checkbox" id="3">' +
+          '<input class="busInput" type="checkbox" id="4">' +
+          '<input class="busInput" type="checkbox" id="5">' +
+          '<input class="busInput" type="checkbox" id="6">' +
+          '<input class="busInput" type="checkbox" id="7">' +
+        '</form>' +
+        '<div id="polylines">' +
+          '<div id="sp">' +
+            '<span class="routeSpan">1H</span>' +
+            '<span class="routeSpan">2H</span>' +
+            '<span class="routeSpan">3H</span>' +
+            '<span class="routeSpan">4H</span>' +
+            '<span class="routeSpan">5H</span>' +
+            '<span class="routeSpan">6H</span>' +
+            '<span class="routeSpan">7H</span><br>' +
+          '</div>' +
+          '<div id="pi">' +
+            '<input class="polylineInput" id="1H" type="checkbox">' +
+            '<input class="polylineInput" id="2H" type="checkbox">' +
+            '<input class="polylineInput" id="3H" type="checkbox">' +
+            '<input class="polylineInput" id="4H" type="checkbox">' +
+            '<input class="polylineInput" id="5H" type="checkbox">' +
+            '<input class="polylineInput" id="6H" type="checkbox">' +
+            '<input class="polylineInput" id="7H" type="checkbox"><br>' +
+          '</div>' +
+        '</div>' +
+        '<div id="ftr">Введи інтервал оновлення позиції автобуса (в секундах)' +
+        '<input type="number" placeholder="5" id="interval" min="5" max="30" step="5">' +
         '<button id="location">Were I am?</button>' +
-      '</form> ' +
-      '<div id="polylines">' +
-        '<label><input id="1H" type="checkbox"><span>1H</span></label>' +
-        '<label><input id="2H" type="checkbox"><span>2H</span></label>' +
-        '<label><input id="3H" type="checkbox"><span>3H</span></label>' +
-        '<label><input id="4H" type="checkbox"><span>4H</span></label>' +
-        '<label><input id="5H" type="checkbox"><span>5H</span></label>' +
-        '<label><input id="6H" type="checkbox"><span>6H</span></label>' +
-        '<label><input id="7H" type="checkbox"><span>7H</span></label>' +
-     '</div> ' +
-    '</div>';
+        '</div>' +
+        '<div id="busInfo"></div>' +
+      '</div>';
+
+var busInfoTemplate = '<script type="tmpl/html" id="info-template">' +
+   '<span id="close"></span>' +
+      '<p><%= obj.route%></p>' +
+      '<p><%= obj.way %></p>' +
+      '<p>Ціна: <%= obj.price %></p>' +
+      '<p>Інтервал руху: <%= obj.interval %></p>' +
+      '<p>Час: <%= obj.time %></p>' +
+      '<p>Прямий маршрут: <%= obj.sw %></p>' +
+      '<p>Зворотній маршрут: <%= obj.bw %></p>' +
+    '</div>' +
+   '</script>';
