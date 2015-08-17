@@ -61,7 +61,7 @@ var MenuView = Backbone.View.extend({
   // when Map and mapView is ready we create instance of other Views
   createInstance: function(){
     this.searchView = new SearchView();
-    //chatView = new ChatView();
+    this.chatView = new ChatView();
     this.onLineTraffic = new OnLineTrafficView();
   },
   // when searchView is ready we create busStopView (it has strong dependence)
@@ -131,7 +131,7 @@ var MenuView = Backbone.View.extend({
     }
   },
   renderChat: function () {
-    if (!this.$el.find('.chat').hasClass('clicked')) {
+    if (this.$el.find('.chat').hasClass('clicked')) {
       this.hidePage();
     } else {
       this.render('.chat');

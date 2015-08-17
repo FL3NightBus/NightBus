@@ -1,5 +1,26 @@
 /*====================Model for our comments==============*/
 
+var ChatView = Backbone.View.extend({
+  initialize: function() {
+    this.render();
+
+    this.form = new FormView();
+    this.app = new CommentsView();
+    var that = this;
+    window.setInterval(function () {
+              that.app.render();
+          }, 5000);   
+  },
+  render: function() {
+   
+    var tmpl = _.template(mainTemplate);
+    console.log(tmpl);
+    $('.submenu').append(tmpl);
+  },
+  getUser: function() {
+    return this.user;
+  }
+});
 
 
 CommentModel = Backbone.Model.extend({
@@ -41,39 +62,6 @@ var CommentView = Backbone.View.extend({
   }
 });
 
-/*======================== View for login form =======================*/
-var UserName = Backbone.View.extend({
-  el: '#username',
-
-  inizialize: function() {
-    this.username = '';
-    this.icon = '';
-
-  },
-  saveData: function() {
-    this.username = $('#name').val();
-    var radios = $('#img').find('input');
-    for (var i = 0, len = radios.length; i < len; i++) {
-      if (radios[i].checked) {
-        var $img = $($(radios[i]).closest('label')).find('img');
-        this.icon = ($img.attr('src'));
-      }
-    }
-    $('#commentbox').css('display', 'block');
-    $('#welcome').css('display', 'block');
-    $('#welcome').append('<img src="' + this.icon + '" width="100", height="100"></img><div><p>Hello <b>' + this.username + '</b></p></div>')
-    $(this.$el).css('display', 'none');
-  },
-  events: {
-    'click #okey': 'saveData'
-  },
-  getData: function() {
-    return { name: this.username, icon: this.icon }
-  }
-
-})
-
-
 
 /*================ View for all comments ===================*/
 
@@ -90,7 +78,7 @@ var CommentsView = Backbone.View.extend({
     this.array = [];
   },
 
-  template: _.template($('#comment-template').html()),
+  template: _.template(commentTemplate),
 
   render: function() {
 
@@ -140,9 +128,9 @@ var CommentsView = Backbone.View.extend({
 })
 
 var FormView = Backbone.View.extend({
-  el: '#form',
+  el: '#formChat',
 
-  template: _.template($('#form-template').html()),
+  template: _.template(formTemplate),
 
   render: function() {
 
@@ -151,17 +139,20 @@ var FormView = Backbone.View.extend({
   },
 
   initialize: function() {
+    this.username = '';
+    this.icon = '';
     this.render();
 
   },
 
   events: {
     'click #ok': 'addContact',
+    'click #okey': 'saveData'
   },
 
   addContact: function() {
     var model = new CommentModel();
-    var data = username.getData();
+    
 
 
     var comments = this.$el.find('textarea');
@@ -173,31 +164,42 @@ var FormView = Backbone.View.extend({
     } else {*/
 
       model.set({
-        name: data.name,
+        name: this.username,
         comments: $(comments).val(),
         time: (new Date()).getTime(),
-        icon: data.icon
+        icon: this.icon
       });
       var cv = new CommentView({
         model: model
       });
       (this.$el.find('form')[0]).reset();
       collection.add(model);
+    },
+    saveData: function() {
+    this.username = $('#name').val();
+    console.log(this.username);
+    var radios = $('#img').find('input');
+    for (var i = 0, len = radios.length; i < len; i++) {
+      if (radios[i].checked) {
+        var $img = $($(radios[i]).closest('label')).find('img');
+        this.icon = ($img.attr('src'));
+      }
     }
+    //$('#commentbox').css('display', 'block');
+    //$('#welcome').css('display', 'block');
+    $('#welcome').append('<img src="' + this.icon + '" width="100", height="100"></img><div><p>Hello <b>' + this.username + '</b></p></div>')
+    //$(this.$el).css('display', 'none');
+    console.log( this);
+  },
+  getData: function() {
+     
+    return {
+      name: this.username,
+      icon: this.icon
+    }
+  }
+
  // },
 
-})
+});
 
-
-var form = new FormView();
-
-
-
-var app = new CommentsView();
-
-var username = new UserName();
-
-window.setInterval(function () {
-    app.render();
-
-}, 5000);   
