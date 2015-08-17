@@ -15,9 +15,17 @@ var MenuView = Backbone.View.extend({
   },
   mapInitialize: function () {
     //   var startCoords = [49.83916569, 23.99448127];
+    var myStyles = [{
+      featureType: 'transit.station',
+      elementType: 'labels.icon',
+      stylers: [{
+        visibility: "off"
+      }]
+    }];
     var mapOptions = {
       //        center: new google.maps.LatLng(startCoords[0], startCoords[1]),
       zoom: 13,
+      styles: myStyles,
       zoomControl: true,
       zoomControlOptions: {
         style: google.maps.ZoomControlStyle.LARGE,
@@ -47,12 +55,17 @@ var MenuView = Backbone.View.extend({
 
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
     this.getGeoLocation();
-    this.getInstance();
+    this.createInstance();
   },
-  getInstance: function(){
+  // when Map and mapView is ready we create instance of other Views
+  createInstance: function(){
     this.searchView = new SearchView();
     //chatView = new ChatView();
     this.onLineTraffic = new OnLineTrafficView();
+  },
+  // when searchView is ready we create busStopView (it has strong dependence)
+  createBusStopView: function(){
+    var bsv = new BusStopView();
   },
   getMap: function () {
     return this.map;

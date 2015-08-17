@@ -32,7 +32,7 @@ var BusStopView = Backbone.View.extend({
 
     initialize: function() {
       this.map = mapView.getMap();
-      this.response = polyline.getResponse();
+//      this.response = polyline.getResponse();
       this.stop = setBusStopArray(this.response);
       this.markers = [];
       this.greateMarkerArray();
@@ -42,6 +42,7 @@ var BusStopView = Backbone.View.extend({
 
     /*========== Розставляю маркери по зупинках ===========*/
     greateMarkerArray: function() {
+      var that = this;
       var pinIcon = new google.maps.MarkerImage(
         'http://icons.iconarchive.com/icons/danieledesantis/playstation-flat/32/playstation-circle-icon.png',
         null,
@@ -50,7 +51,7 @@ var BusStopView = Backbone.View.extend({
         new google.maps.Size(15, 15)
       );
 
-      that = this;
+      
 
       this.stop.forEach(function(el) {
         var marker = new google.maps.Marker({
@@ -81,6 +82,7 @@ var BusStopView = Backbone.View.extend({
     timeForMarkers: function() {
       var that = this;
        var infowindow = new google.maps.InfoWindow();
+
       this.markers.forEach(function(marker) {
         console.log('here add event listener');
         google.maps.event.addListener(marker, 'click', function() {
@@ -174,7 +176,7 @@ var BusStopView = Backbone.View.extend({
           });
         });
         return busesIndexes;
-      },
-})
+      }
+});
 
 var bsv = new BusStopView();
