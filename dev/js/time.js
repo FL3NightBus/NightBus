@@ -31,9 +31,8 @@
 var BusStopView = Backbone.View.extend({
 
     initialize: function() {
-      this.map = mapView.getMap();
-//      this.response = polyline.getResponse();
-      this.stop = setBusStopArray(this.response);
+      this.map = menuView.getMap();
+      this.stop = menuView.searchView.getBusStopArray();
       this.markers = [];
       this.greateMarkerArray();
       this.timeForMarkers();
@@ -84,7 +83,7 @@ var BusStopView = Backbone.View.extend({
        var infowindow = new google.maps.InfoWindow();
 
       this.markers.forEach(function(marker) {
-        console.log('here add event listener');
+   //     console.log('here add event listener');
         google.maps.event.addListener(marker, 'click', function() {
          
           var title = (marker.getTitle()); //title of marker
