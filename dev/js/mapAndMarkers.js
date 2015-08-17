@@ -12,8 +12,7 @@ var OnLineTrafficView = Backbone.View.extend({
 
   },
   render: function () {
-    var tmplHTML = $("#checkmenu-template").text();
-    var tmpl = _.template(tmplHTML);
+    var tmpl = _.template(onLineTrafficViewTemplate);
     $('.submenu').append(tmpl);
     //   this.clicker();
   },
