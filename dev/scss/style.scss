@@ -10,15 +10,14 @@ html, body, #map {
 	padding: 0;
 }
 .pad10 {
-	padding: 10px;
+	padding: 10px 5%;
 }
 .right {
 	text-align: right;
-	padding-right: 15px; 
 }
 .txt {
-	height: 27px;
-	width: 77%;
+	height: 20px;
+	width: 80%;
 }
 .clicked {
 	background-color: $submenu;
@@ -124,35 +123,46 @@ html, body, #map {
 	opacity: 0.8;
 	
 	background-color: $submenu;
-	div {
-		margin: 10px 0;
-	}
 	label {
 		display: inline-block;
 		width: 10%;
-		text-align: right;
+		text-align: left;
 	}
 	input[type=button] {
-		width: 70px;
+		width: 85px;
 	}
 	.search {
 		display: none;
 	}
 	.autocomplete {
+		border-bottom: 2px solid #fff;
+		div {
+			margin: 10px 0;
+		}
 		p {
-			margin-left: 25px; 
+			padding-bottom: 5px;
+			margin: 0; 
 			border-bottom: 2px solid #fff;
 			width: 60%;
 		}
 		input {
-			margin-left: 20px;
+			margin-left: 5%;
 		}
 	}
-	.click {
-		margin-left: 25px; 
-	}
-	#start {
-		margin-top: 10px;
+	.buttons {
+		text-align: center;
+		input {
+			margin: 2%;
+			width: 28%;
+			text-align: center;
+		}
+		.info {
+			border: 1px solid #fff;
+			overflow-y: scroll;
+			p{
+				margin: 5px;
+			}
+		}
 	}
 	.page {
 		display: none;
@@ -162,23 +172,51 @@ html, body, #map {
 	height: 85%;
 }
 
-/* @media only screen
-and (max-device-height : 420px) {
+@media only screen 
+  and (min-device-width: 300px) 
+  and (max-device-width: 780px)
+  and (orientation: landscape) {
+
 	#nav{
-		height: 25%	
+		width: 10%;
+		min-width: 0;
+		height: 100%;
+		div.button {
+			float: none;
+			height: 25%;
+			img {
+				top: 0;
+				left: 0;
+				margin: 0;
+			}
+		}
+		.button + .button {
+			border-left: none;
+		}
 	}
+
 	.submenu {
-		top: 25%;	
+		top: 0;
+		left: 10%;
+		width: 0;
+		min-width: 0;
+		height: 100%;
+		
+		-moz-transition: width 1s; /* Firefox 4 */
+		-webkit-transition: width 1s; /* Safari and Chrome */
+		-o-transition: width 1s; /* Opera */
+		
 	}
 	.submenu.active {
-		height: 75%;
+		width: 90%;
+		height: 100%;
 	}
-} */
+}
 
 @media only screen
-and (min-device-width : 420px){
+and (min-device-width : 780px){
 	.txt {
-		width: 320px;	
+		width: 200px;	
 	}
 	.btn {
 		background: $button; 
@@ -196,7 +234,7 @@ and (min-device-width : 420px){
 		}
 		.button {
 			float: none;
-			display: block;
+			/* display: block; */
 			height: 100px;
 			width: 100%;
 			padding: 18px; 
@@ -225,9 +263,6 @@ and (min-device-width : 420px){
 		label {
 			display: inline-block;
 			width: 40px;
-		}
-		input[type=button] {
-			width: 70px;
 		}
 		#change {
 			margin-left: 125px; 

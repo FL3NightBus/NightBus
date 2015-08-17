@@ -62,7 +62,9 @@ var SearchView = Backbone.View.extend({
   },
   getPosition: function() {
     var myPosition = menuView.getYourPosition();
-    this.getPoints(null, 1, myPosition);
+    if(this.isInLviv(myPosition)){
+      this.getPoints(null, 1, myPosition);
+    }
   },
   busStopCoordinateComparison: function(routeCoord, busStopCoord1, busStopArray) {
     for (var i = 0, len = busStopArray.length; i < len; i++) {
@@ -269,8 +271,8 @@ var SearchView = Backbone.View.extend({
       if (this.isInLviv(this.fieldto)) {
         menuView.hidePage();
         this.setBusStopMarkers();
-        var busStopsFrom = this.getRequiredBusStops(this.fieldfrom);
-        var busStopsTo = this.getRequiredBusStops(this.fieldto);
+        var busStopsFrom = this.getNearestBusStops(this.fieldfrom);
+        var busStopsTo = this.getNearestBusStops(this.fieldto);
         this.busStopMarkers = this.deleteMarkers(this.busStopMarkers);
         this.getBusNumbers(busStopsFrom, busStopsTo);
       } else {
