@@ -10,11 +10,11 @@ var SearchView = Backbone.View.extend({
   template: _.template('<div class="page searchPage">' +
                           '<div class="autocomplete">' +
                             '<p>SEARCH</p>' +
-                            '<div>' +
-                              '<label for="id">from</label>' +
+                            '<div class="right">' +
+                              '<label for="from">from</label>' +
                               '<input type="text" id="from" name="from" class="txt" />' +
                             '</div>' +
-                            '<div>' +
+                            '<div class="right">' +
                               '<label for="to">to</label>' +
                               '<input type="text" id="to" name="to" class="txt" />' +
                               //'<input type="text" id="to" name="to" class="txt" value="<% this.fieldto %>" />' +
@@ -123,6 +123,7 @@ var SearchView = Backbone.View.extend({
       });
     });
     that.busStopArray = busStopArray;
+    menuView.createBusStopView();
   },
   getBusStopArray: function(){
     return this.busStopArray;
