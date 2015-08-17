@@ -10,6 +10,7 @@ var MenuView = Backbone.View.extend({
   onLineTraffic: null,
   initialize: function () {
     this.yourPosition = {};
+    this.count = 0;
     //     google.maps.event.addDomListener(window, 'load', this.mapInitialize);
     this.mapInitialize();
   },
@@ -66,6 +67,12 @@ var MenuView = Backbone.View.extend({
   // when searchView is ready we create busStopView (it has strong dependence)
   createBusStopView: function(){
     var bsv = new BusStopView();
+  },
+  setCount: function(){
+    this.count++;
+    if (this.count == 2) {
+      menuView.createBusStopView();
+    }
   },
   getMap: function () {
     return this.map;

@@ -299,13 +299,17 @@ var OnLineTrafficView = Backbone.View.extend({
 
 
       success: function (resp) {
-        that.response = resp;
-        console.log(this.response)
+       that.putResponse(resp);
+        //console.log(this.response)
       },
       error: function (err) {
         console.log(err);
       }
     })
+  },
+   putResponse: function(response){
+    this.response = response;
+    menuView.setCount();//koly counter == 2
   },
 
   getResponse: function () {
@@ -321,7 +325,7 @@ var OnLineTrafficView = Backbone.View.extend({
     switch (waynumber) {
     case '1H':
       {
-        coords = this.getCoords(5);
+        coords = this.getCoords('1H');
         this.poliarr[waynumber].setOptions({
           strokeColor: '#00FFFF',
           path: coords
@@ -331,7 +335,7 @@ var OnLineTrafficView = Backbone.View.extend({
 
     case '2H':
       {
-        coords = this.getCoords(6);
+        coords = this.getCoords('2H');
         this.poliarr[waynumber].setOptions({
           strokeColor: '#FF0000',
           path: coords
@@ -341,7 +345,7 @@ var OnLineTrafficView = Backbone.View.extend({
 
     case '3H':
       {
-        coords = this.getCoords(0);
+        coords = this.getCoords('3H');
         this.poliarr[waynumber].setOptions({
           strokeColor: '#FFFF00',
           path: coords
@@ -351,7 +355,7 @@ var OnLineTrafficView = Backbone.View.extend({
 
     case '4H':
       {
-        coords = this.getCoords(1);
+        coords = this.getCoords('4H');
         this.poliarr[waynumber].setOptions({
           strokeColor: '#FF5722',
           path: coords
@@ -361,7 +365,7 @@ var OnLineTrafficView = Backbone.View.extend({
 
     case '5H':
       {
-        coords = this.getCoords(2);
+        coords = this.getCoords('5H');
         this.poliarr[waynumber].setOptions({
           strokeColor: '#FFC107',
           path: coords
@@ -371,7 +375,7 @@ var OnLineTrafficView = Backbone.View.extend({
 
     case '6H':
       {
-        coords = this.getCoords(4);
+        coords = this.getCoords('6H');
         this.poliarr[waynumber].setOptions({
           strokeColor: '#C2185B',
           path: coords
@@ -381,7 +385,7 @@ var OnLineTrafficView = Backbone.View.extend({
 
     case '7H':
       {
-        coords = this.getCoords(3);
+        coords = this.getCoords('7H');
         this.poliarr[waynumber].setOptions({
           strokeColor: '#4CAF50',
           path: coords
@@ -393,10 +397,15 @@ var OnLineTrafficView = Backbone.View.extend({
 
   getCoords: function (number) {
 
-    var res = this.getResponse();
-    console.log(res);
-    var templ = res[number].routeArray;
-    return templ.map(function (el) {
+    var templ =[];
+    var res = this.getResponse();//array of obj!!!!!!!!!!!!!!!!
+    res.forEach(function(obj) {
+      if(obj.name == name){
+        templ = obj.routeArray;
+     }
+    })
+    console.log(templ);
+    return templ.map(function(el) {
       return (new google.maps.LatLng(el.lat, el.lng));
     })
 
@@ -410,9 +419,6 @@ var OnLineTrafficView = Backbone.View.extend({
     var map = menuView.getMap();
     var that = this;
     $.when(that.getPoli(name)).then(function () {
-      console.log(name);
-      console.log(that.poliarr);
-      console.log(name === '5H');
       that.poliarr[name].setMap(map);
     })
   },
