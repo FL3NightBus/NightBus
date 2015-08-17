@@ -170,10 +170,12 @@ var MenuView = Backbone.View.extend({
       submenu.addClass('active');
     }, time);
     setTimeout(function () {
-      submenu.addClass('pad10')
-      submenu.find(pageClass + 'Page').css({
-        'display': 'block'
-      });
+      if(submenu.hasClass('active')){
+        submenu.addClass('pad10');
+        submenu.find(pageClass + 'Page').css({
+          'display': 'block'
+        });
+      }
     }, time + 1000);
   }
 });

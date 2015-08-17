@@ -16,7 +16,7 @@ var SearchView = Backbone.View.extend({
   listener: null,
   initialize: function() {
     var that = this;
-    this.fetch('http://localhost:8080/api/routes', that.setBusStopArray);
+    this.fetch('https://last.localtunnel.me/api/routes', that.setBusStopArray);
     this.$el.append(this.template);
     this.autocompleteListener();
     this.markers = [];
@@ -60,8 +60,9 @@ var SearchView = Backbone.View.extend({
     this.$el.find(to).val('');
   },
   getPosition: function(){
-    menuView.hidePage();
-    menuView.getYourPosition();
+    var myPosition = menuView.getYourPosition();
+    console.log(myPosition);
+    this.getPoints(null, 1, myPosition);
   },
   busStopCoordinateComparison: function(routeCoord, busStopCoord1, busStopArray){
     for (var i = 0, len = busStopArray.length; i < len; i++) {
@@ -237,26 +238,27 @@ var SearchView = Backbone.View.extend({
       menuView.onLineTraffic.drawPoliline(routeNumber);
     })
   },
-  getPoints: function(){
+  getPoints: function(event, pointNumber, position){
     this.$el.parent().find('.search').addClass('dblclicked');
     var that = this,
-      amount = 0,
+      amount = pointNumber || 0,
       busStopsArray = [],
       map = menuView.getMap();
     this.setBusStopMarkers();
-    //var zoom = map.getZoom();
     map.setOptions({
       disableDoubleClickZoom: true
     });
     menuView.hidePage();
-    this.listener = google.maps.event.addListener(map, 'dblclick', function(e) {
+    if(pointNumber){
+      busStopsArray.push(that.getRequiredBusStops(position));
+    };
+    this.listener = google.maps.event.addListener(map, 'click', function(e) {
       if(that.isInLviv(e.latLng)){
         amount++;
         busStopsArray.push(that.getRequiredBusStops(e.latLng));
         if (amount == 2) {
           google.maps.event.removeListener(that.listener);
           that.busStopMarkers = that.deleteMarkers(that.busStopMarkers);
-          //map.setZoom(zoom);
           that.getBusNumbers(busStopsArray[0], busStopsArray[1]);
           map.setOptions({
             disableDoubleClickZoom: false
@@ -273,7 +275,6 @@ var SearchView = Backbone.View.extend({
       if(this.isInLviv(this.fieldto)) {
         menuView.hidePage();
         this.setBusStopMarkers();
-        console.log(this.fieldfrom);
         var busStopsFrom = this.getRequiredBusStops(this.fieldfrom);
         var busStopsTo = this.getRequiredBusStops(this.fieldto);
         this.busStopMarkers = this.deleteMarkers(this.busStopMarkers);

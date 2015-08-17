@@ -19,7 +19,7 @@ var searchcViewTemplate = '<div class="page searchPage">' +
                               '<input type="button" id="here" name="here" class="btn btn-default" value="Here!">' +
                               '<div>' +
                                 '<p>' +
-                                  '<img src="img/alert.png"> You can doble click on two points to find your way:' +
+                                  '<img src="img/alert.png"> You can single click on two points to find your way:' +
                                 '</p>' +
                                 '<input type="button" id="start" name="start" class="dbl btn btn-default" value="start">' +
                                 '<p> You can delete all markers on the map:</p>' +
