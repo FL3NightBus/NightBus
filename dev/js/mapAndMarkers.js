@@ -6,7 +6,8 @@ var OnLineTrafficView = Backbone.View.extend({
     this.busArray = {};
     this.anglesArray = {};
     this.render();
-
+    this.info = [];
+    this.setInfo();
     this.response = [];
     this.setResponse();
 
@@ -20,7 +21,9 @@ var OnLineTrafficView = Backbone.View.extend({
   events: {
     'change #form input:checkbox': 'listener',
     'click #polylines input:checkbox': 'passPoliline',
-    'click button#location': 'getPosition'
+    'click button#location': 'getPosition',
+    'click #polylines span': 'showPopup',
+    'click #closeInfo': 'hidePopup'
   },
   /*clicker: function () {
     var that = this;
@@ -395,7 +398,7 @@ var OnLineTrafficView = Backbone.View.extend({
     }
   },
 
-  getCoords: function (number) {
+  getCoords: function (name) {
 
     var templ =[];
     var res = this.getResponse();//array of obj!!!!!!!!!!!!!!!!
@@ -442,5 +445,41 @@ var OnLineTrafficView = Backbone.View.extend({
     } else {
       this.hidePoliline(waynumber);
     }
+  },
+  showPopup: function(e) {
+    var route = ($(e.currentTarget).text()); //name of route
+    var data = this.info;
+    var information;
+    data.forEach(function(obj) {
+        if(obj.name == route) {
+         information = obj.info;
+      }
+    })
+
+    console.log(information);
+    var templ = _.template((busInfoTemplate));
+    console.log(templ({obj: information}));
+
+    $('#busInfo').html(templ({obj: information})); 
+
+    $('#busInfo').show();
+  },
+   setInfo: function() {
+    that = this;
+    $.ajax({
+      type: "GET",
+      dataType: 'json',
+      async: true,
+      url: 'http://localhost:8080/api/routes?info=all',
+      success: function(response) {
+        that.info = response;
+      }
+    });
+  },
+  getInfo: function() {
+    return this.info;
+  },
+  hidePopup: function() {
+     $('#busInfo').hide();
   }
 });

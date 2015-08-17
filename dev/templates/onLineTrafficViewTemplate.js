@@ -35,14 +35,11 @@ var onLineTrafficViewTemplate = '<div class="page onLineTrafficPage">' +
         '<div id="busInfo"></div>' +
       '</div>';
 
-var busInfoTemplate = '<script type="tmpl/html" id="info-template">' +
-   '<span id="close"></span>' +
+var busInfoTemplate = '<span id="closeInfo">x</span>' +
       '<p><%= obj.route%></p>' +
       '<p><%= obj.way %></p>' +
       '<p>Ціна: <%= obj.price %></p>' +
       '<p>Інтервал руху: <%= obj.interval %></p>' +
       '<p>Час: <%= obj.time %></p>' +
       '<p>Прямий маршрут: <%= obj.sw %></p>' +
-      '<p>Зворотній маршрут: <%= obj.bw %></p>' +
-    '</div>' +
-   '</script>';
+      '<p>Зворотній маршрут: <%= obj.bw %></p>';
