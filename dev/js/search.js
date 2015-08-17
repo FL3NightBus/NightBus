@@ -93,7 +93,7 @@ var SearchView = Backbone.View.extend({
       });
     });
     that.busStopArray = busStopArray;
-    menuView.createBusStopView();
+    menuView.setCount();
   },
   getBusStopArray: function() {
     return this.busStopArray;
