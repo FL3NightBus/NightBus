@@ -7,10 +7,10 @@ var ChatView = Backbone.View.extend({
     this.form = new FormView();
     this.app = new CommentsView();
     var that = this;
-    window.setInterval(function () {
+    this.interval = setInterval(function () {
               that.app.render();
-          }, 5000);   
-  },
+          }, 5000);  
+   },
   render: function() {
    
     var tmpl = _.template(mainTemplate);
@@ -18,6 +18,9 @@ var ChatView = Backbone.View.extend({
   },
   getUser: function() {
     return this.user;
+  },
+  closeInterval: function() {
+    clearInterval(this.interval);
   }
 });
 
