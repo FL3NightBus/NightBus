@@ -9,9 +9,6 @@ html, body, #map {
 	margin: 0;
 	padding: 0;
 }
-/* .pad10 {
-	padding: 10px 5%;
-} */
 .right {
 	text-align: right;
 }
@@ -120,9 +117,9 @@ html, body, #map {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	
-	-moz-transition: height 1s; /* Firefox 4 */
-	-webkit-transition: height 1s; /* Safari and Chrome */
-	-o-transition: height 1s; /* Opera */
+	-moz-transition: height 1s;
+	-webkit-transition: height 1s;
+	-o-transition: height 1s;
 	opacity: 0.8;
 	
 	background-color: $submenu;
@@ -130,9 +127,6 @@ html, body, #map {
 		display: inline-block;
 		width: 10%;
 		text-align: left;
-	}
-	input[type=button] {
-		width: 85px;
 	}
 	.search {
 		display: none;
@@ -161,7 +155,8 @@ html, body, #map {
 		.info {
 			border: 1px solid #fff;
 			overflow-y: scroll;
-			p{
+			text-align: left;
+			p {
 				margin: 5px;
 			}
 		}
@@ -244,9 +239,9 @@ html, body, #map {
 		min-width: 0;
 		height: 100%;
 		
-		-moz-transition: width 1s; /* Firefox 4 */
-		-webkit-transition: width 1s; /* Safari and Chrome */
-		-o-transition: width 1s; /* Opera */
+		-moz-transition: width 1s;
+		-webkit-transition: width 1s;
+		-o-transition: width 1s;
 		
 	}
 	.submenu.active {
@@ -257,12 +252,6 @@ html, body, #map {
 
 @media only screen
 and (min-device-width : 780px){
-	/* .pad10 {
-		padding: 20px;
-	} */
-	/* .txt {
-		width: 200px;	
-	} */
 	.btn {
 		background: $button; 
 	}
@@ -279,7 +268,6 @@ and (min-device-width : 780px){
 		}
 		.button {
 			float: none;
-			/* display: block; */
 			height: 100px;
 			width: 100%;
 			padding: 18px; 
@@ -299,9 +287,9 @@ and (min-device-width : 780px){
 		min-width: 0;
 		opacity: 1;
 		background-color: $submenuDesktop;
-		-moz-transition: width 1s; /* Firefox 4 */
-		-webkit-transition: width 1s; /* Safari and Chrome */
-		-o-transition: width 1s; /* Opera */
+		-moz-transition: width 1s;
+		-webkit-transition: width 1s;
+		-o-transition: width 1s;
 		.info {
 			overflow-y: scroll;
 			height: 250px;
