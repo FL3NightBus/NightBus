@@ -1,18 +1,16 @@
 var OnLineTrafficView = Backbone.View.extend({
-  initialize: function () {
+  initialize: function() {
     this.timerArray = {};
     this.markersArray = {};
     this.stoper = {};
     this.busArray = {};
     this.anglesArray = {};
     this.render();
-    this.info = [];
-    this.setInfo();
     this.response = [];
     this.setResponse();
 
   },
-  render: function () {
+  render: function() {
     var tmpl = _.template(onLineTrafficViewTemplate);
     $('.submenu').append(tmpl);
     //   this.clicker();
@@ -33,43 +31,43 @@ var OnLineTrafficView = Backbone.View.extend({
   },*/
 
 
-  getPosition: function () {
+  getPosition: function() {
     menuView.getYourPosition();
   },
-  getBusArray: function (id) {
+  getBusArray: function(id) {
     return this.busArray['id' + id];
   },
-  setBusArray: function (id, array) {
+  setBusArray: function(id, array) {
     this.busArray['id' + id] = array;
   },
-  getAnglesArray: function (id) {
+  getAnglesArray: function(id) {
     return this.anglesArray['id' + id];
   },
-  setAnglesArray: function (id, array) {
+  setAnglesArray: function(id, array) {
     this.anglesArray['id' + id] = array;
   },
-  setStoper: function (id, boolean) {
+  setStoper: function(id, boolean) {
     this.stoper['id' + id] = boolean;
   },
-  getStoper: function (id) {
+  getStoper: function(id) {
     return this.stoper['id' + id];
   },
-  setTimer: function (id, timer) {
+  setTimer: function(id, timer) {
     this.timerArray['id' + id] = timer;
   },
-  getTimer: function (id) {
+  getTimer: function(id) {
     return this.timerArray['id' + id];
   },
-  setMarkers: function (id, markers) {
+  setMarkers: function(id, markers) {
     this.markersArray['id' + id] = markers;
   },
-  pushMarkers: function (id, marker) {
+  pushMarkers: function(id, marker) {
     this.markersArray['id' + id].push(marker);
   },
-  getMarkers: function (id) {
+  getMarkers: function(id) {
     return this.markersArray['id' + id];
   },
-  getAngle: function (coords, coords1) {
+  getAngle: function(coords, coords1) {
     // take to pair of coordinates and calculate angle between vector and axis
     var x = (coords1.G - coords.G);
     var y = (coords1.K - coords.K);
@@ -79,7 +77,7 @@ var OnLineTrafficView = Backbone.View.extend({
     }
     return 90 - angle;
   },
-  listener: function () {
+  listener: function() {
     // elem - #id of checkbox which is changed (could be [1-7])
     var elem = this.$el.context.activeElement.id;
     // interval (seconds) - value from #interval to know when send requests (default 5s)
@@ -100,14 +98,14 @@ var OnLineTrafficView = Backbone.View.extend({
       this.setMarker([], map, elem, false);
     };
   },
-  firstRequest: function (bus) {
+  firstRequest: function(bus) {
     var that = this,
       map = menuView.getMap(),
       url = 'http://localhost:8080/api/routes?route=' + bus + 'H';
     that.setMarkers(bus, []);
     that.fetch(url, that.getFirstCoordinates, bus);
   },
-  getFirstCoordinates: function (response, bus, that) {
+  getFirstCoordinates: function(response, bus, that) {
     if (that.getStoper(bus)) {
       var map = menuView.getMap();
       // here we create an array of locations (coordinates for future markers)
@@ -122,35 +120,35 @@ var OnLineTrafficView = Backbone.View.extend({
       that.setMarker(locationsArray, map, bus, 0, true);
     }
   },
-  fetch: function (url, callback, bus) {
+  fetch: function(url, callback, bus) {
     var that = this;
     $.ajax({
       type: "GET",
       dataType: 'json',
       url: url,
-      success: function (response) {
+      success: function(response) {
         callback(response, bus, that);
       },
-      error: function (err) {
+      error: function(err) {
         console.log(this.url);
         console.log(response);
       }
     });
   },
-  busOnWay: function (bus, interval) {
+  busOnWay: function(bus, interval) {
     var that = this;
     that.setMarkers(bus, []);
     // time - number of miliseconds for setInterval to get data from server and render it on Map
     var time = interval * 1000,
       url = 'http://localhost:8080/api/routes?route=' + bus + 'H';
-    var timer = setInterval(function () {
+    var timer = setInterval(function() {
       // this GET allow us get a coordinates from server and send them to setMerker();
       // also we can get a coordinats for few buses. So we should be ready to support all of them 
       that.fetch(url, that.getCoordinatesAndAngles, bus);
     }, time);
     that.setTimer(bus, timer);
   },
-  getCoordinatesAndAngles: function (response, bus, that) {
+  getCoordinatesAndAngles: function(response, bus, that) {
     // here we create an array of locations (coordinates for future markers) and angles between markers
     var angleArray = [],
       busArr = [],
@@ -188,7 +186,7 @@ var OnLineTrafficView = Backbone.View.extend({
       that.setMarker(locationsArray, map, bus, angleArray, true);
     }
   },
-  setMarker: function (locations, map, bus, angleArray, stop) {
+  setMarker: function(locations, map, bus, angleArray, stop) {
     var that = this;
     // we get [Markers] for this route (bus). It could be existing array or empty one
     var markers = that.getMarkers(bus);
@@ -213,29 +211,29 @@ var OnLineTrafficView = Backbone.View.extend({
         options,
         infowindow;
       switch (bus) {
-      case '1':
-        color = '#0000FF';
-        break;
-      case '2':
-        color = '#7FFF00';
-        break;
-      case '3':
-        color = '#FFA500';
-        break;
-      case '4':
-        color = '#FF0000';
-        break;
-      case '5':
-        color = '#00FFFF';
-        break;
-      case '6':
-        color = '#FFFF00';
-        break;
-      case '7':
-        color = '#FF00FF';
-        break;
-      default:
-        color = '#000000';
+        case '1':
+          color = '#0000FF';
+          break;
+        case '2':
+          color = '#7FFF00';
+          break;
+        case '3':
+          color = '#FFA500';
+          break;
+        case '4':
+          color = '#FF0000';
+          break;
+        case '5':
+          color = '#00FFFF';
+          break;
+        case '6':
+          color = '#FFFF00';
+          break;
+        case '7':
+          color = '#FF00FF';
+          break;
+        default:
+          color = '#000000';
       }
       // than we create a symbol to show marker
       vehicle = {
@@ -291,7 +289,7 @@ var OnLineTrafficView = Backbone.View.extend({
 
   /*  Poliline   */
 
-  setResponse: function () {
+  setResponse: function() {
 
     var that = this;
     $.ajax({
@@ -301,111 +299,111 @@ var OnLineTrafficView = Backbone.View.extend({
       url: 'http://localhost:8080/api/routes/',
 
 
-      success: function (resp) {
-       that.putResponse(resp);
+      success: function(resp) {
+        that.putResponse(resp);
         //console.log(this.response)
       },
-      error: function (err) {
+      error: function(err) {
         console.log(err);
       }
     })
   },
-   putResponse: function(response){
+  putResponse: function(response) {
     this.response = response;
-    menuView.setCount();//koly counter == 2
+    menuView.setCount(); //koly counter == 2
   },
 
-  getResponse: function () {
+  getResponse: function() {
     console.log('getresp: ' + this.response)
     return this.response;
   },
 
 
-  getPoli: function (waynumber) {
+  getPoli: function(waynumber) {
     this.poliarr = menuView.getPoliArray();
     var coords = [];
 
     switch (waynumber) {
-    case '1H':
-      {
-        coords = this.getCoords('1H');
-        this.poliarr[waynumber].setOptions({
-          strokeColor: '#00FFFF',
-          path: coords
-        });
-        break;
-      }
+      case '1H':
+        {
+          coords = this.getCoords('1H');
+          this.poliarr[waynumber].setOptions({
+            strokeColor: '#00FFFF',
+            path: coords
+          });
+          break;
+        }
 
-    case '2H':
-      {
-        coords = this.getCoords('2H');
-        this.poliarr[waynumber].setOptions({
-          strokeColor: '#FF0000',
-          path: coords
-        });
-        break;
-      }
+      case '2H':
+        {
+          coords = this.getCoords('2H');
+          this.poliarr[waynumber].setOptions({
+            strokeColor: '#FF0000',
+            path: coords
+          });
+          break;
+        }
 
-    case '3H':
-      {
-        coords = this.getCoords('3H');
-        this.poliarr[waynumber].setOptions({
-          strokeColor: '#FFFF00',
-          path: coords
-        });
-        break;
-      }
+      case '3H':
+        {
+          coords = this.getCoords('3H');
+          this.poliarr[waynumber].setOptions({
+            strokeColor: '#FFFF00',
+            path: coords
+          });
+          break;
+        }
 
-    case '4H':
-      {
-        coords = this.getCoords('4H');
-        this.poliarr[waynumber].setOptions({
-          strokeColor: '#FF5722',
-          path: coords
-        });
-        break;
-      }
+      case '4H':
+        {
+          coords = this.getCoords('4H');
+          this.poliarr[waynumber].setOptions({
+            strokeColor: '#FF5722',
+            path: coords
+          });
+          break;
+        }
 
-    case '5H':
-      {
-        coords = this.getCoords('5H');
-        this.poliarr[waynumber].setOptions({
-          strokeColor: '#FFC107',
-          path: coords
-        });
-        break;
-      }
+      case '5H':
+        {
+          coords = this.getCoords('5H');
+          this.poliarr[waynumber].setOptions({
+            strokeColor: '#FFC107',
+            path: coords
+          });
+          break;
+        }
 
-    case '6H':
-      {
-        coords = this.getCoords('6H');
-        this.poliarr[waynumber].setOptions({
-          strokeColor: '#C2185B',
-          path: coords
-        });
-        break;
-      }
+      case '6H':
+        {
+          coords = this.getCoords('6H');
+          this.poliarr[waynumber].setOptions({
+            strokeColor: '#C2185B',
+            path: coords
+          });
+          break;
+        }
 
-    case '7H':
-      {
-        coords = this.getCoords('7H');
-        this.poliarr[waynumber].setOptions({
-          strokeColor: '#4CAF50',
-          path: coords
-        });
-        break;
-      }
+      case '7H':
+        {
+          coords = this.getCoords('7H');
+          this.poliarr[waynumber].setOptions({
+            strokeColor: '#4CAF50',
+            path: coords
+          });
+          break;
+        }
     }
   },
 
-  getCoords: function (name) {
+  getCoords: function(name) {
 
-    var templ =[];
-    var res = this.getResponse();//array of obj!!!!!!!!!!!!!!!!
+    var templ = [];
+    var res = this.getResponse(); //array of obj!!!!!!!!!!!!!!!!
     res.forEach(function(obj) {
-      if(obj.name == name){
+      if (obj.name == name) {
         templ = obj.routeArray;
-     }
+      }
     })
     console.log(templ);
     return templ.map(function(el) {
@@ -418,23 +416,23 @@ var OnLineTrafficView = Backbone.View.extend({
     'click input:checkbox': 'passPoliline'
   },*/
 
-  drawPoliline: function (name) {
+  drawPoliline: function(name) {
     var map = menuView.getMap();
     var that = this;
-    $.when(that.getPoli(name)).then(function () {
+    $.when(that.getPoli(name)).then(function() {
       that.poliarr[name].setMap(map);
     })
   },
 
-  hidePoliline: function (name) {
+  hidePoliline: function(name) {
     var map = menuView.getMap();
     var that = this;
-    $.when(that.getPoli(name)).then(function () {
+    $.when(that.getPoli(name)).then(function() {
       that.poliarr[name].setMap(null);
     })
   },
 
-  passPoliline: function (e) {
+  passPoliline: function(e) {
     var $checkbox = $(e.currentTarget);
     var that = this;
     var map = menuView.getMap();
@@ -447,39 +445,37 @@ var OnLineTrafficView = Backbone.View.extend({
     }
   },
   showPopup: function(e) {
+    var data = this.setInfo();
     var route = ($(e.currentTarget).text()); //name of route
-    var data = this.info;
-    var information;
-    data.forEach(function(obj) {
-        if(obj.name == route) {
-         information = obj.info;
-      }
-    })
 
-    console.log(information);
     var templ = _.template((busInfoTemplate));
-    console.log(templ({obj: information}));
 
-    $('#busInfo').html(templ({obj: information})); 
+    $('#busInfo').html(templ({
+      obj: data[route]
+    }));
 
     $('#busInfo').show();
   },
-   setInfo: function() {
-    that = this;
-    $.ajax({
-      type: "GET",
-      dataType: 'json',
-      async: true,
-      url: 'http://localhost:8080/api/routes?info=all',
-      success: function(response) {
-        that.info = response;
-      }
+  setInfo: function() {
+    var infoObject = {};
+    this.response.forEach(function(el) {
+      infoObject[el.name] = {
+        route: el.info.route,
+        way: el.info.way,
+        price: el.info.price,
+        interval: el.info.interval,
+        time: el.info.time,
+        sw: el.info.sw,
+        bw: el.info.bw
+      };
     });
+    console.log(infoObject);
+    return infoObject;
   },
   getInfo: function() {
     return this.info;
   },
   hidePopup: function() {
-     $('#busInfo').hide();
+    $('#busInfo').hide();
   }
 });
