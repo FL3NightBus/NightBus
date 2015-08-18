@@ -159,6 +159,9 @@ var MenuView = Backbone.View.extend({
     }
   },
   renderChat: function () {
+    if(!this.chatView){
+      this.chatView = new ChatView();
+    };
     if (this.$el.find('.chat').hasClass('clicked')) {
       this.hidePage();
     } else {

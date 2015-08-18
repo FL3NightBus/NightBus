@@ -9,8 +9,6 @@ var SearchView = Backbone.View.extend({
   },
   template: _.template(searchcViewTemplate),
   busStopArray: [],
-  //fieldfrom: '',
-  //fieldto: '',
   busStopMarkers: [],
   listener: null,
   initialize: function() {
