@@ -2,7 +2,7 @@ var mainTemplate = '<div class="page chatPage">' +
                   '<div id="formChat"></div><ul id="body"></ul>' +
                   '</div>';
 
-var formTemplate = '<form> <div id="username">' +
+var formTemplate = '<div id="username">' +
         '<div id="img">' +
           '<label>' +
             '<img src="https://cdn0.iconfinder.com/data/icons/user-pictures/100/male-48.png">' +
@@ -26,23 +26,25 @@ var formTemplate = '<form> <div id="username">' +
           '</label>' +
         '</div>' +
         '<input id="name" type="text" placeholder="Введіть свій нікнейм">' +
-        '<input type="button" value="ок" id="okey">' +
+        '<input type="button" value="ок" id="okey" class="btn">' +
       '</div>' +
-      '<div id="welcome"></div>' +
       '<div id="commentbox">' +
         '<textarea id="comment"></textarea>' +
-        '<input type="button" value="ok" id="ok">' +
-      '</div>' +
-    '</form>';
+        '<input type="button" value="ok" id="ok" class="btn">' +
+      '</div>';
 
 var commentTemplate = '<div id="chat">' +
     '<% comments.forEach(function(mod) { %>' +
-    '<ul>' +
-      '<div><img src ="<%= mod.icon %>"/></div>' +
-      '<div><%= mod.name %></div>' +
-      '<div><%= mod.comments %></div>' +
-      '<div><%= mod.time %></div>' +
-    '</ul>' +
+    '<div class="msg">' +
+       '<div class="leftcont">' +
+          '<div><img src ="<%= mod.icon %>"/></div>' +
+          '<div><%= mod.name %></div>' +
+       '</div>' +
+       '<div class = "rightcont">' +
+         '<div><%= mod.comments %></div>' +
+         '<div class="time"><%= mod.time %></div>' +
+        '</div>' +
+    '</div>' +
     '<% }) %>' +
-    '<input type="button", value="show all", id="show">' +
+    '<input type="button", value="show all", id="show" class="btn">' +
     '</div>';

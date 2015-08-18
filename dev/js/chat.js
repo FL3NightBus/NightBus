@@ -14,7 +14,6 @@ var ChatView = Backbone.View.extend({
   render: function() {
    
     var tmpl = _.template(mainTemplate);
-    console.log(tmpl);
     $('.submenu').append(tmpl);
   },
   getUser: function() {
@@ -91,10 +90,8 @@ var CommentsView = Backbone.View.extend({
       url: 'http://localhost:8080/api/comments/',
       success: function(response) {
         var arrayModel = [];
-        console.log(response);
-
         response.forEach(function(obj) {
-          arrayModel.push(obj)
+        arrayModel.push(obj)
         })
         arrayModel.reverse();
 
@@ -172,12 +169,11 @@ var FormView = Backbone.View.extend({
       var cv = new CommentView({
         model: model
       });
-      (this.$el.find('form')[0]).reset();
+      //(this.$el.find('form')[0]).reset();
       collection.add(model);
     },
     saveData: function() {
     this.username = $('#name').val();
-    console.log(this.username);
     var radios = $('#img').find('input');
     for (var i = 0, len = radios.length; i < len; i++) {
       if (radios[i].checked) {
@@ -185,11 +181,9 @@ var FormView = Backbone.View.extend({
         this.icon = ($img.attr('src'));
       }
     }
-    //$('#commentbox').css('display', 'block');
-    //$('#welcome').css('display', 'block');
-    $('#welcome').append('<img src="' + this.icon + '" width="100", height="100"></img><div><p>Hello <b>' + this.username + '</b></p></div>')
-    //$(this.$el).css('display', 'none');
-    console.log( this);
+    $('#commentbox').show();
+    $('#username').hide();
+
   },
   getData: function() {
      
