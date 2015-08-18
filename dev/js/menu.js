@@ -64,6 +64,30 @@ var MenuView = Backbone.View.extend({
     this.chatView = new ChatView();
     this.onLineTraffic = new OnLineTrafficView();
   },
+  isInLviv: function(position) {
+    var isOnCircle,
+      map = this.map,
+      center = {
+        lat: 49.827145,
+        lng: 24.026072
+      },
+      circleOption = {
+      map: map,
+      center: position,
+      radius: 9000,
+      visible: false
+    },
+      circle = new google.maps.Circle(circleOption),
+      marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        visible: false
+      });
+    isOnCircle = circle.getBounds().contains(marker.getPosition());
+    marker.setMap(null);
+    marker = null;
+    return isOnCircle;
+  },
   // when searchView is ready we create busStopView (it has strong dependence)
   createBusStopView: function(){
     var bsv = new BusStopView();
@@ -86,6 +110,10 @@ var MenuView = Backbone.View.extend({
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        var position_ = {lat: pos.G, lng: pos.K};
+        if (!(that.isInLviv(pos))) {
+          pos = new google.maps.LatLng(49.83916569, 23.99448127);
+        }
         var infowindow = new google.maps.InfoWindow({
           map: map,
           position: pos,
