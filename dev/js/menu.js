@@ -182,6 +182,9 @@ var MenuView = Backbone.View.extend({
     submenu.find('.page').css({
       'display': 'none'
     });
+    if(this.$el.find('.chat').hasClass('clicked')) {
+      this.chatView.closeInterval();
+    };
     if (submenu.hasClass('active')) {
       submenu.removeClass('active');
       time = 1000;
@@ -193,6 +196,9 @@ var MenuView = Backbone.View.extend({
     var that = this;
     var submenu = this.$el.parent().find('.submenu');
     var time = this.hidePage();
+    if(pageClass == '.chat') {
+      this.chatView.setIntAjax();
+    };
     if (pageClass == '.search' && this.searchView.listener) {
       google.maps.event.removeListener(this.searchView.listener);
       this.map.setOptions({

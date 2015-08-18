@@ -6,11 +6,15 @@ var ChatView = Backbone.View.extend({
 
     this.form = new FormView();
     this.app = new CommentsView();
+   },
+   setIntAjax: function(){
     var that = this;
     this.interval = setInterval(function () {
               that.app.render();
+              //console.log('ok');
           }, 5000);  
-   },
+
+  },
   render: function() {
    
     var tmpl = _.template(mainTemplate);
