@@ -144,9 +144,7 @@ var MenuView = Backbone.View.extend({
     this.map.setCenter(options.position);
   },
   setYourPosition: function (coords) {
-    this.yourPosition.lat = coords.G;
-    this.yourPosition.lng = coords.K;
-    console.log(this.yourPosition);
+    this.yourPosition = coords;
   },
   getYourPosition: function () {
     return this.yourPosition;
