@@ -12,7 +12,6 @@ var SearchView = Backbone.View.extend({
   //fieldfrom: '',
   //fieldto: '',
   busStopMarkers: [],
-  //markers: [],
   listener: null,
   initialize: function() {
     var that = this;
@@ -22,25 +21,6 @@ var SearchView = Backbone.View.extend({
     this.markers = [];
     this.circles = [];
     this.infowindow = [];
-  },
-  isInLviv: function(position) {
-    var isOnCircle,
-      map = menuView.getMap(),
-      center = {
-        lat: 49.827145,
-        lng: 24.026072
-      },
-      circleOption = this.setCircleOptions(map, center, 9000, false),
-      circle = new google.maps.Circle(circleOption),
-      marker = new google.maps.Marker({
-        position: position,
-        map: map,
-        visible: false
-      });
-    isOnCircle = circle.getBounds().contains(marker.getPosition());
-    marker.setMap(null);
-    marker = null;
-    return isOnCircle;
   },
   fetch: function(url, callback) {
     var that = this;
@@ -62,7 +42,7 @@ var SearchView = Backbone.View.extend({
   },
   getPosition: function() {
     var myPosition = menuView.getYourPosition();
-    if(this.isInLviv(myPosition)){
+    if(menuView.isInLviv(myPosition)){
       this.getPoints(null, 1, myPosition);
     }
   },
@@ -134,7 +114,8 @@ var SearchView = Backbone.View.extend({
     that.markers.push(new google.maps.Marker({
       position: position,
       map: map,
-      visible: true
+      visible: true,
+      icon: 'img/unisex.png'
     }))
   },
   deleteMarkers: function(markers) {
@@ -145,18 +126,14 @@ var SearchView = Backbone.View.extend({
     return markers;
   },
   clearMap: function() {
+    this.$el.find('.info').html('');
     this.markers = this.deleteMarkers(this.markers);
     this.infowindow.forEach(function(el) {
       el.close();
     });
-  },
-  setCircleOptions: function(map, position, radius, isVisible) {
-    return {
-      map: map,
-      center: position,
-      radius: radius,
-      visible: isVisible
-    }
+    this.poliline.forEach(function(el){
+      menuView.onLineTraffic.hidePoliline(el);
+    });
   },
   setInfowindow: function(busStopArray) {
     var that = this,
@@ -201,6 +178,7 @@ var SearchView = Backbone.View.extend({
   },
   getBusNumbers: function(busStopsFrom, busStopsTo) {
     var buses = [],
+      infoForBus = 'маршрутом ',
       info,
       busesNotCrossFrom = [],
       busesNotCrossTo = [];
@@ -224,15 +202,19 @@ var SearchView = Backbone.View.extend({
     });
     if (buses.length === 0) {
       info = buses.join(', ');
-      this.$el.find('.info').append('<p>There are no direct buses. First you nead to take ' + busesNotCrossFrom.join(', ') + ' and then change to ' + busesNotCrossTo.join(', ') + '.</p>');
+      this.$el.find('.info').append('<p>Нажаль, прямого маршруту немає. Спочатку Вам потрібно сісти на ' + busesNotCrossFrom.join(' або ') + ', а потім пересісти на ' + busesNotCrossTo.join(' або ') + '.</p>');
       buses = busesNotCrossFrom.concat(busesNotCrossTo);
     } else {
       info = buses.join(', ');
-      this.$el.find('.info').append('<p>You can get from one point to another by the next buses ' + info + '.</p>');
+      if(buses.length > 1){
+        infoForBus = 'наступними маршрутами: ';
+      };
+      this.$el.find('.info').append('<p>Ви можете доїхати з точки відправлення до точки призначення ' + infoForBus + info + '.</p>');
     };
     buses.forEach(function(routeNumber) {
       menuView.onLineTraffic.drawPoliline(routeNumber);
     })
+    this.poliline = buses;
   },
   getPoints: function(event, pointNumber, position) {
     this.$el.parent().find('.search').addClass('dblclicked');
@@ -249,7 +231,7 @@ var SearchView = Backbone.View.extend({
       busStopsArray.push(that.getNearestBusStops(position));
     };
     this.listener = google.maps.event.addListener(map, 'click', function(e) {
-      if (that.isInLviv(e.latLng)) {
+      if (menuView.isInLviv(e.latLng)) {
         amount++;
         busStopsArray.push(that.getNearestBusStops(e.latLng));
         if (amount == 2) {
@@ -260,26 +242,28 @@ var SearchView = Backbone.View.extend({
             disableDoubleClickZoom: false
           });
           that.$el.parent().find('.search').removeClass('dblclicked');
+          that.$el.parent().find('.search').addClass('newInfo');
         }
       } else {
-        alert('This place is not in Lviv. Please choose another!');
+        alert('Вказане місце поза Львовом. Виберіть інше місце!');
       }
     });
   },
   setPoints: function() {
-    if (this.isInLviv(this.fieldfrom)) {
-      if (this.isInLviv(this.fieldto)) {
+    if (this.fieldfrom && menuView.isInLviv(this.fieldfrom)) {
+      if (this.fieldto && menuView.isInLviv(this.fieldto)) {
         menuView.hidePage();
         this.setBusStopMarkers();
         var busStopsFrom = this.getNearestBusStops(this.fieldfrom);
         var busStopsTo = this.getNearestBusStops(this.fieldto);
         this.busStopMarkers = this.deleteMarkers(this.busStopMarkers);
         this.getBusNumbers(busStopsFrom, busStopsTo);
+        this.$el.parent().find('.search').addClass('newInfo');
       } else {
-        alert('The place "To" is not in Lviv. Please tipe another address!');
+        alert('Перевірте місце призначення. Можливо, адреса вказана невірно, або знаходиться за межами досяжності наших маршрутів.');
       }
     } else {
-      alert('The place "From" is not in Lviv. Please tipe another address!');
+      alert('Перевірте місце відправлення. Можливо, адреса вказана невірно, або знаходиться за межами досяжності наших маршрутів.');
     }
   }
 });

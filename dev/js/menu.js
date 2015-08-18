@@ -61,8 +61,12 @@ var MenuView = Backbone.View.extend({
   // when Map and mapView is ready we create instance of other Views
   createInstance: function(){
     this.searchView = new SearchView();
-    this.chatView = new ChatView();
+    //this.chatView = new ChatView();
     this.onLineTraffic = new OnLineTrafficView();
+  },
+  // when searchView is ready we create busStopView (it has strong dependence)
+  createBusStopView: function(){
+    var bsv = new BusStopView();
   },
   isInLviv: function(position) {
     var isOnCircle,
@@ -73,7 +77,7 @@ var MenuView = Backbone.View.extend({
       },
       circleOption = {
       map: map,
-      center: position,
+      center: center,
       radius: 9000,
       visible: false
     },
@@ -87,10 +91,6 @@ var MenuView = Backbone.View.extend({
     marker.setMap(null);
     marker = null;
     return isOnCircle;
-  },
-  // when searchView is ready we create busStopView (it has strong dependence)
-  createBusStopView: function(){
-    var bsv = new BusStopView();
   },
   setCount: function(){
     this.count++;
@@ -180,7 +180,7 @@ var MenuView = Backbone.View.extend({
       'display': 'none'
     });
     if (submenu.hasClass('active')) {
-      submenu.removeClass('active pad10');
+      submenu.removeClass('active');
       time = 1000;
     };
     that.$el.find('.clicked').removeClass('clicked');
@@ -200,13 +200,12 @@ var MenuView = Backbone.View.extend({
         this.$el.find('.search').removeClass('dblclicked');
       }
     };
-    this.$el.find(pageClass).addClass('clicked');
+    this.$el.find(pageClass).removeClass('newInfo').addClass('clicked');
     setTimeout(function () {
       submenu.addClass('active');
     }, time);
     setTimeout(function () {
       if(submenu.hasClass('active')){
-        submenu.addClass('pad10');
         submenu.find(pageClass + 'Page').css({
           'display': 'block'
         });

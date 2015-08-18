@@ -9,9 +9,9 @@ html, body, #map {
 	margin: 0;
 	padding: 0;
 }
-.pad10 {
+/* .pad10 {
 	padding: 10px 5%;
-}
+} */
 .right {
 	text-align: right;
 }
@@ -104,6 +104,9 @@ html, body, #map {
 			margin-top: -32px;
 		}
 	}
+	.newInfo {
+		background: $submenuDesktop; 
+	}
 }
 .submenu {
 	position: absolute;
@@ -143,7 +146,6 @@ html, body, #map {
 			padding-bottom: 5px;
 			margin: 0; 
 			border-bottom: 2px solid #fff;
-			width: 60%;
 		}
 		input {
 			margin-left: 5%;
@@ -211,6 +213,7 @@ html, body, #map {
 }
 .submenu.active {
 	height: 85%;
+	padding: 10px 5%;
 }
 
 @media only screen 
@@ -219,26 +222,24 @@ html, body, #map {
   and (orientation: landscape) {
 
 	#nav{
-		width: 10%;
+		width: 15%;
 		min-width: 0;
 		height: 100%;
 		div.button {
 			float: none;
 			height: 25%;
-			img {
-				top: 0;
-				left: 0;
-				margin: 0;
-			}
+			padding: 17%;
+			width: 100%;
 		}
 		.button + .button {
 			border-left: none;
+			border-top: solid 3px $submenu;
 		}
 	}
 
 	.submenu {
 		top: 0;
-		left: 10%;
+		left: 15%;
 		width: 0;
 		min-width: 0;
 		height: 100%;
@@ -249,16 +250,19 @@ html, body, #map {
 		
 	}
 	.submenu.active {
-		width: 90%;
+		width: 85%;
 		height: 100%;
 	}
 }
 
 @media only screen
 and (min-device-width : 780px){
-	.txt {
+	/* .pad10 {
+		padding: 20px;
+	} */
+	/* .txt {
 		width: 200px;	
-	}
+	} */
 	.btn {
 		background: $button; 
 	}
@@ -298,6 +302,10 @@ and (min-device-width : 780px){
 		-moz-transition: width 1s; /* Firefox 4 */
 		-webkit-transition: width 1s; /* Safari and Chrome */
 		-o-transition: width 1s; /* Opera */
+		.info {
+			overflow-y: scroll;
+			height: 250px;
+		}
 		div {
 			margin: 10px 0;
 		}
@@ -350,5 +358,6 @@ and (min-device-width : 780px){
 	.submenu.active {
 		width: 428px;
 		height: 100%;
+		padding: 20px; 
 	}
 }
