@@ -33,8 +33,7 @@ var onLineTrafficViewTemplate = '<div class="page onLineTrafficPage">' +
         '</div>' +
         '<div id="ftr">Як часто показувати автобуси ?' +
             '<input type="number" placeholder="5 сек" id="interval" min="5" max="30" step="5">' +
-            '</div>' +
-            '<button id="location" class="btn btn-default">Готово</button>' +
+        '</div>' +
         '<div id="busInfo"></div>' +
       '</div>';
 
