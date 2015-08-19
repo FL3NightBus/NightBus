@@ -445,13 +445,18 @@ var OnLineTrafficView = Backbone.View.extend({
     }
   },
   showPopup: function(e) {
-    var data = this.setInfo();
-    var route = ($(e.currentTarget).text()); //name of route
-
+   var data = this.setInfo();
+    var route = ($(e.currentTarget).text()); 
+    var obj;
+    for (var key in data) {
+      if(key == route) {
+        information = data[key]
+      }
+    }
     var templ = _.template((busInfoTemplate));
 
     $('#busInfo').html(templ({
-      obj: data[route]
+      obj: information
     }));
 
     $('#busInfo').show();

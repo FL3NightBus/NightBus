@@ -44,7 +44,7 @@ var onLineTrafficViewTemplate = '<div class="page onLineTrafficPage">' +
             'Зворотній маршрут: Церква Воскресіння Господнього - вул. Виговського - вул. Кульпарківська - Залізничний вокзал - пл. Різні</div>' +
       '</div>';
 
-var busInfoTemplate = '<script type="tmpl/html" id="info-template">' +
+var busInfoTemplate = '<div id="#busInfo">' +
    '<span id="close"></span>' +
       '<p><%= obj.route%></p>' +
       '<p><%= obj.way %></p>' +
@@ -53,5 +53,4 @@ var busInfoTemplate = '<script type="tmpl/html" id="info-template">' +
       '<p>Час: <%= obj.time %></p>' +
       '<p>Прямий маршрут: <%= obj.sw %></p>' +
       '<p>Зворотній маршрут: <%= obj.bw %></p>' +
-    '</div>' +
-   '</script>';
+    '</div>';
