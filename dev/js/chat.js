@@ -154,7 +154,7 @@ var FormView = Backbone.View.extend({
   addContact: function() {
     var model = new CommentModel();
     var comments = this.$el.find('textarea');
-    if ($(comments).val().match(/[a-zA-Zа-яА-Яії]{3,60}/gi)) {
+    if ($(comments).val().match(/[a-zA-Zа-яА-Яії]{3,100}/gi)) {
 
       model.set({
         name: this.username,

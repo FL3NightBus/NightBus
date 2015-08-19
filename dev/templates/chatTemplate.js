@@ -29,7 +29,7 @@ var formTemplate = '<div id="username">' +
         '<input type="button" value="ок" id="okey" class="btn">' +
       '</div>' +
       '<div id="commentbox">' +
-        '<textarea id="comment"></textarea>' +
+        '<textarea id="comment" maxlength="100"></textarea>' +
         '<input type="button" value="ok" id="ok" class="btn">' +
       '</div>';
 

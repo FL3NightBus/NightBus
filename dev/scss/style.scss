@@ -13,7 +13,8 @@ html, body, #map {
 }
 .right {
 	text-align: right;
-}.btn {
+}
+.btn {
 	display: inline-block;
 	padding: 2px 4px;
 	margin-bottom: 0;
@@ -32,16 +33,9 @@ html, body, #map {
 	user-select: none;
 	background-image: none;
 	border: 1px solid transparent;
-
-	-webkit-box-shadow: 0px 3px 10px rgba(0,0,0,.7), 
-		inset 0 2px 7px rgba(255,255,255,0.4),
-			0 2px 0 rgba(0,0,0,0.1);
-	-moz-box-shadow: 0px 3px 10px rgba(0,0,0,.7), 
-		inset 0 2px 7px rgba(255,255,255,0.4),
-			0 2px 0 rgba(0,0,0,0.1);
-	box-shadow: 0px 3px 10px rgba(0,0,0,.7), 
-		inset 0 2px 7px rgba(255,255,255,0.4),
-			0 2px 0 rgba(0,0,0,0.1);
+	-webkit-box-shadow: 0px 3px 10px rgba(0, 0, 0, .7), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0px 3px 10px rgba(0, 0, 0, .7), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 3px 10px rgba(0, 0, 0, .7), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
 }
 .btn:focus, .btn:active:focus {
 	outline: thin dotted;
@@ -51,12 +45,9 @@ html, body, #map {
 .btn:hover, .btn:focus {
 	color: #333;
 	text-decoration: none;
-	-webkit-box-shadow: inset 0px 0 20px rgba(0,0,0,.25), 
-		0 0 0 rgba(255,255,255,0.6);
-	-moz-box-shadow: inset 0px 0 20px rgba(0,0,0,.25), 
-		0 0 0 rgba(255,255,255,0.6);
-	box-shadow: inset 0px 0 20px rgba(0,0,0,.25), 
-		0 0 0 rgba(255,255,255,0.6);
+	-webkit-box-shadow: inset 0px 0 20px rgba(0, 0, 0, .25), 0 0 0 rgba(255, 255, 255, 0.6);
+	-moz-box-shadow: inset 0px 0 20px rgba(0, 0, 0, .25), 0 0 0 rgba(255, 255, 255, 0.6);
+	box-shadow: inset 0px 0 20px rgba(0, 0, 0, .25), 0 0 0 rgba(255, 255, 255, 0.6);
 }
 .btn:active {
 	background-image: none;
@@ -97,16 +88,9 @@ html, body, #map {
 	user-select: none;
 	background-image: none;
 	border: 1px solid transparent;
-
-	-webkit-box-shadow: 0px 3px 10px rgba(0,0,0,.7), 
-		inset 0 2px 7px rgba(255,255,255,0.4),
-			0 2px 0 rgba(0,0,0,0.1);
-	-moz-box-shadow: 0px 3px 10px rgba(0,0,0,.7), 
-		inset 0 2px 7px rgba(255,255,255,0.4),
-			0 2px 0 rgba(0,0,0,0.1);
-	box-shadow: 0px 3px 10px rgba(0,0,0,.7), 
-		inset 0 2px 7px rgba(255,255,255,0.4),
-			0 2px 0 rgba(0,0,0,0.1);
+	-webkit-box-shadow: 0px 3px 10px rgba(0, 0, 0, .7), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0px 3px 10px rgba(0, 0, 0, .7), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 3px 10px rgba(0, 0, 0, .7), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
 }
 .btn:focus, .btn:active:focus {
 	outline: thin dotted;
@@ -116,12 +100,9 @@ html, body, #map {
 .btn:hover, .btn:focus {
 	color: #333;
 	text-decoration: none;
-	-webkit-box-shadow: inset 0px 0 20px rgba(0,0,0,.25), 
-		0 0 0 rgba(255,255,255,0.6);
-	-moz-box-shadow: inset 0px 0 20px rgba(0,0,0,.25), 
-		0 0 0 rgba(255,255,255,0.6);
-	box-shadow: inset 0px 0 20px rgba(0,0,0,.25), 
-		0 0 0 rgba(255,255,255,0.6);
+	-webkit-box-shadow: inset 0px 0 20px rgba(0, 0, 0, .25), 0 0 0 rgba(255, 255, 255, 0.6);
+	-moz-box-shadow: inset 0px 0 20px rgba(0, 0, 0, .25), 0 0 0 rgba(255, 255, 255, 0.6);
+	box-shadow: inset 0px 0 20px rgba(0, 0, 0, .25), 0 0 0 rgba(255, 255, 255, 0.6);
 }
 .btn:active {
 	background-image: none;
@@ -151,6 +132,7 @@ html, body, #map {
 	height: 15%;
 	z-index: 1;
 	background: $panel;
+	box-shadow: inset 0px 0 5px rgba(44, 44, 44, .0), 1px 2px 20px rgba(0, 0, 0, 0.5);
 
 	.button + .button {
 		border-left: solid 3px $submenu;
@@ -192,14 +174,14 @@ html, body, #map {
 	-o-transition: height 1s;
 	opacity: 0.8;
 	background-color: $submenu;
-	
+
 	label {
 		display: inline-block;
 		width: 10%;
-		font-size: 3vh;
+		//font-size: 3vh;
 		text-align: left;
 	}
-	input {
+	input[type="button"] {
 		width: 28%;
 		height: 5vh;
 		margin-left: 5%;
@@ -211,13 +193,15 @@ html, body, #map {
 	.autocomplete {
 		//border-bottom: 2px solid #fff;
 		height: 25%;
+
 		div {
-			margin: 10px 0;//
+			margin: 10px 0;
+			//
 		}
 		p {
-			padding-bottom: 5px;//
+			padding-bottom: 5px;
+			//
 			margin: 0;
-			
 			border-bottom: 2px solid #fff;
 		}
 		input[type=text] {
@@ -242,8 +226,9 @@ html, body, #map {
 		height: 30%;
 		border: 1px solid #fff;
 		text-align: justify;
-		margin-top: 5px; 
+		margin-top: 5px;
 		padding: 5px;
+
 		p {
 			margin: 5px;
 		}
@@ -255,15 +240,162 @@ html, body, #map {
 		text-align: justify;
 		font-size: 2.5vh;
 		line-height: 2.5vh;
-		box-shadow: 0px 3px 30px rgba(0,0,0,.6), 
-     inset 0 2px 7px rgba(255,255,255,0.4),
-      0 2px 0 rgba(0,0,0,0.1);
-    -moz-box-shadow: 0px 3px 30px rgba(0,0,0,.6), 
-     inset 0 2px 7px rgba(255,255,255,0.4),
-      0 2px 0 rgba(0,0,0,0.1);
-    -webkit-box-shadow: 0px 3px 30px rgba(0,0,0,.6), 
-     inset 0 2px 7px rgba(255,255,255,0.4),
-      0 2px 0 rgba(0,0,0,0.1);
+		box-shadow: 0px 3px 30px rgba(0, 0, 0, .6), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
+		-moz-box-shadow: 0px 3px 30px rgba(0, 0, 0, .6), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
+		-webkit-box-shadow: 0px 3px 30px rgba(0, 0, 0, .6), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
+	}
+	.page {
+		display: none;
+	}
+	.onLineTrafficPage {
+		font-size: 16px;
+
+		.busInput, .routeSpan, .polylineInput {
+			display: block;
+			margin: 15px auto;
+		}
+		#form, #sp, #pi {
+			width: 30%;
+			float: left;
+		}
+		#ftr {
+			clear: both;
+			margin: 2% 5%;
+		}
+		.busInput {
+			margin-left: 75%;
+		}
+		.routeSpan {
+			cursor: pointer;
+			margin-top: 10%;
+			margin-bottom: 10%;
+			padding-left: 55%;
+		}
+		.polylineInput {
+			margin-right: 40%;
+		}
+		#busInfo {
+			display: none;
+			position: absolute;
+			top: 0;
+			left: 0;
+			background: $submenu;
+			height: 100%;
+			margin: 0 auto;
+			padding: 0 10px;
+			box-shadow: 0px 3px 10px rgba(0, 0, 0, .6), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
+			-moz-box-shadow: 0px 3px 30px rgba(0, 0, 0, .6), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
+			-webkit-box-shadow: 0px 3px 30px rgba(0, 0, 0, .6), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
+
+			p:nth-child(2) {
+				text-align: center;
+			}
+		}
+		#closeInfo {
+			cursor: pointer;
+			position: absolute;
+			right: 10px;
+			top: 5px;
+		}
+	}
+	.chatPage {
+		#chat {
+			width: 100%;
+			height: 350px;
+			overflow: auto;
+		}
+		#formChat {
+			height: 110px;
+			margin-bottom: 10px;
+		}
+		#commentbox {
+			display: none;
+			height: 100%;
+			width: 100%;
+			float: left;
+			position: relative;
+
+			textarea {
+				width: 98%;
+				float: left;
+				height: 60%;
+				margin-bottom: 10px;
+			}
+			input {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+			}
+		}
+		#username {
+			width: 100%;
+
+			input[type="text"] {
+				width: 70%;
+				margin-right: 2%;
+				float: left;
+				padding: 5px 2px;
+				box-shadow: 0px 1px 1px rgba(0, 0, 0, .4), inset 1px 2px 3px rgba(120, 120, 120, 0.8);
+			}
+			input[type="button"] {
+				width: 25%;
+				margin: 0;
+				padding: 0;
+			}
+		}
+		#img {
+			label {
+				width: 18.7%;
+				margin: 5px auto;
+				display: inline-block;
+				padding: 0.615384%;
+
+				input, img {
+					display: block;
+					margin: 0 auto;
+				}
+				img {
+					padding-bottom: 5px;
+				}
+			}
+		}
+		#body {
+			margin: 0;
+			padding: 0;
+			font-size: 10px;
+
+			.msg {
+				height: 70px;
+				width: 95%;
+				clear: both;
+				padding: 5px;
+				margin-bottom: 10px;
+				word-wrap: break-word;
+				box-shadow: 0px 2px 7px rgba(0, 0, 0, .6), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
+				-moz-box-shadow: 0px 2px 7px rgba(0, 0, 0, .6), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
+				-webkit-box-shadow: 0px 2px 7px rgba(0, 0, 0, .6), inset 0 2px 7px rgba(255, 255, 255, 0.4), 0 2px 0 rgba(0, 0, 0, 0.1);
+			}
+			.leftcont {
+				width: 20%;
+				float: left;
+				height: 100%;
+			}
+			.leftcont:nth-child(1) {
+				text-align: center;
+			}
+			.rightcont {
+				width: 70%;
+				float: left;
+				height: 100%;
+				position: relative;
+			}
+			.time {
+				position: absolute;
+				bottom: 0;
+				right: 15px;
+				margin: 3px;
+			}
+		}
 	}
 }
 .submenu.active {
@@ -278,7 +410,7 @@ and (orientation:landscape) {
 		width: 15%;
 		min-width: 0;
 		height: 100%;
-		
+
 		div.button {
 			float: none;
 			height: 25%;
@@ -299,7 +431,7 @@ and (orientation:landscape) {
 		-moz-transition: width 1s;
 		-webkit-transition: width 1s;
 		-o-transition: width 1s;
-		
+
 		label {
 			display: inline-block;
 			width: 7%;
@@ -311,7 +443,7 @@ and (orientation:landscape) {
 			height: 7vh;
 			margin-left: 5%;
 		}
-		.autocomplete { 
+		.autocomplete {
 			input[type=text] {
 				height: 4vh;
 				font-size: 4vh;
@@ -330,12 +462,50 @@ and (orientation:landscape) {
 		.find {
 			padding: 5px;
 		}
+		.onLineTrafficPage {
+			.busInput, .routeSpan, .polylineInput {
+				display: block;
+				margin: 15px auto;
+			}
+			#form, #sp, #pi {
+				width: 30%;
+				float: left;
+			}
+			#ftr {
+				clear: both;
+			}
+			.busInput {
+				margin-left: 75%;
+			}
+			.routeSpan {
+				margin-top: 8%;
+				margin-bottom: 9%;
+				padding-left: 55%;
+			}
+			.polylineInput {
+				margin-right: 40%;
+			}
+		}
+		.chatPage {
+			font-size: 15px;
+
+			#commentbox {
+				display: none;
+			}
+			#chat {
+				margin-top: 35px;
+				height: 600px;
+
+				input[type="button"] {
+					margin: 15px 0;
+				}
+			}
+		}
 	}
 	.submenu.active {
 		width: 85%;
 		height: 100%;
 	}
-}
 }
 @media only screen
 and (min-device-width:780px) {
@@ -383,6 +553,56 @@ and (min-device-width:780px) {
 		label {
 			display: inline-block;
 			width: 40px;
+		}
+		.onLineTrafficPage {
+			#form, #sp, #pi {
+				width: 100%;
+				//float: left;
+			}
+			#sp {
+				padding-left: 15px;
+			}
+			.busInput, .polylineInput {
+				display: inline-block;
+				float: left;
+				margin: 0 5%;
+				padding: 0;
+			}
+			#pi, #ftr {
+				padding-bottom: 20px;
+			}
+			#polylines {
+				padding-bottom: 20px;
+			}
+			.routeSpan {
+				display: inline-block;
+				float: left;
+				width: 13.3%;
+				margin: 0;
+				padding: 0;
+			}
+			input[type="checkbox"] {
+				-ms-transform: scale(2); /* IE */
+				-moz-transform: scale(2); /* FF */
+				-webkit-transform: scale(2); /* Safari and Chrome */
+				-o-transform: scale(2); /* Opera */
+				padding: 10px;
+			}
+			input[type="number"] {
+				width: 20%;
+				margin-left: 10px;
+			}
+			#busInfo {
+				position: relative;
+				bottom: 0;
+				left: 0;
+				width: 90%;
+				height: auto;
+				padding: 1px 5px;
+			}
+			#closeInfo {
+				visibility: hidden;
+			}
 		}
 	}
 	.submenu.active {
