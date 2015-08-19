@@ -134,7 +134,10 @@ var SearchView = Backbone.View.extend({
       this.poliline.forEach(function(el){
         menuView.onLineTraffic.hidePoliline(el);
       });
-    }
+    };
+    this.$el.find('.info').css({
+      'display': 'none'
+    })
   },
   setInfowindow: function(busStopArray) {
     var that = this,

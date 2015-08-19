@@ -8,6 +8,10 @@ html, body, #map {
 	margin: 0;
 	padding: 0;
 }
+.page {
+	height: auto;
+	background-color: $submenu; 
+}
 .clicked {
 	background-color: $submenu;
 }
@@ -192,7 +196,7 @@ html, body, #map {
 	}
 	.autocomplete {
 		//border-bottom: 2px solid #fff;
-		height: 25%;
+		//height: 25%;
 
 		div {
 			margin: 10px 0;
@@ -214,7 +218,7 @@ html, body, #map {
 	}
 	.buttons {
 		text-align: center;
-		height: 10%;
+		//height: 10%;
 		padding: 10px 0;
 
 		input {
@@ -223,7 +227,7 @@ html, body, #map {
 		}
 	}
 	.find {
-		height: 30%;
+		//height: 30%;
 		border: 1px solid #fff;
 		text-align: justify;
 		margin-top: 5px;
