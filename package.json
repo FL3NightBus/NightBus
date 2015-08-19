@@ -1,0 +1,23 @@
+{
+  "name": "homework-project",
+  "version": "0.0.1",
+  "description": "tools",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "~3.9.0",
+    "gulp-concat": "~2.6.0",
+    "gulp-connect": "~2.2.0",
+    "gulp-connect-proxy": "~0.3.1",
+    "gulp-cssmin": "~0.1.7",
+    "gulp-rename": "~1.2.2",
+    "gulp-sass": "~2.0.3",
+    "gulp-sourcemaps": "~1.5.2",
+    "gulp-uglify": "~1.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oleh Tsiroh",
+  "license": "BSD-2-Clause"
+}
