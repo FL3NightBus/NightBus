@@ -35,13 +35,7 @@ var onLineTrafficViewTemplate = '<div class="page onLineTrafficPage">' +
             '<input type="number" placeholder="5 сек" id="interval" min="5" max="30" step="5">' +
             '</div>' +
             '<button id="location" class="btn btn-default">Готово</button>' +
-        '<div id="busInfo">Нічний маршрут №2Н' +
-            'пл. Різні - Залізничний вокзал - вул. Патона' +
-            'Ціна: 8.00 UAH' +
-            'Інтервал руху: 80 хв.' +
-            'Час: 23:30 - 04:50' +
-            'Прямий маршрут: пл. Різні - Залізничний вокзал - вул. Виговського - Церква Воскресіння Господнього' +
-            'Зворотній маршрут: Церква Воскресіння Господнього - вул. Виговського - вул. Кульпарківська - Залізничний вокзал - пл. Різні</div>' +
+        '<div id="busInfo"></div>' +
       '</div>';
 
 var busInfoTemplate = '<div id="#busInfo">' +

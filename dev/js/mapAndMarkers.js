@@ -8,28 +8,18 @@ var OnLineTrafficView = Backbone.View.extend({
     this.render();
     this.response = [];
     this.setResponse();
-
   },
   render: function() {
     var tmpl = _.template(onLineTrafficViewTemplate);
     $('.submenu').append(tmpl);
-    //   this.clicker();
   },
   el: '.submenu',
   events: {
     'change #form input:checkbox': 'listener',
     'click #polylines input:checkbox': 'passPoliline',
-    'click button#location': 'getPosition',
     'click #polylines span': 'showPopup',
     'click #closeInfo': 'hidePopup'
   },
-  /*clicker: function () {
-    var that = this;
-    $('input:checkbox').click(function () {
-      that.listener();
-    });
-  },*/
-
 
   getPosition: function() {
     menuView.getYourPosition();
@@ -78,20 +68,20 @@ var OnLineTrafficView = Backbone.View.extend({
     return 90 - angle;
   },
   listener: function() {
-    // elem - #id of checkbox which is changed (could be [1-7])
-    var elem = this.$el.context.activeElement.id;
     // interval (seconds) - value from #interval to know when send requests (default 5s)
     var interval = ($('#interval').val()) || 3;
-    if ($('#' + elem + ':checked').val()) {
-      this.setStoper(elem, true);
+    var elBox = $(e.currentTarget);
+    // elem - #id of checkbox which is changed (could be [1-7])
+    var elem = (elBox).attr('id');
+    if (elBox.is(':checked')) {
       // if checkbox is 'checked' than we send data (# of route and interval) to busOnWay()
+      this.setStoper(elem, true);
       this.firstRequest(elem);
       this.busOnWay(elem, interval);
-    };
+    } else {
     // listener for checkboxes. When !'ckecked' - route with #id '[1-7]' will be erase from Map
     //we have 'stop' variable what has undefined value.
     // if checkbox isn't checked we send false to setMarker to delete all markers and stop render them
-    if (!($('#' + elem + ':checked').val())) {
       this.setStoper(elem, false);
       clearInterval(this.getTimer(elem));
       var map = menuView.getMap();
@@ -158,26 +148,20 @@ var OnLineTrafficView = Backbone.View.extend({
       tempB,
       angle,
       map = menuView.getMap();
-    //        console.log(response);
     if (that.getStoper(bus)) {
       // going throught response (array of objects (with pairs of coords)) to create locations
       for (var i = 0; i < response.length; i++) {
         locationsArray.push(new google.maps.LatLng(response[i].lat, response[i].lng));
-        //                  console.log(response[i].lat);
-        //                  console.log(response[i].lng);
       };
       busArr = that.getBusArray(bus);
       angArr = that.getAnglesArray(bus);
       that.setBusArray(bus, locationsArray);
       for (var i = 0; i < locationsArray.length; i++) {
-        //           console.log(busArr[i] + ' & ' + locationsArray[i]);
         angle = (that.getAngle(busArr[i], locationsArray[i]));
-        //            console.log('angle = ' + angle);
         tempA = locationsArray[i];
         tempB = busArr[i];
         if ((tempA.G === tempB.G) && (tempA.K === tempB.K)) {
           angle = angArr[i];
-          //            console.log('it\'s busStop, so new angle = ' + angle);
         }
         angleArray.push(angle);
       };
