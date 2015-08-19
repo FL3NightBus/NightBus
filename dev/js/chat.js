@@ -3,20 +3,17 @@
 var ChatView = Backbone.View.extend({
   initialize: function() {
     this.render();
-
     this.form = new FormView();
     this.app = new CommentsView();
-   },
-   setIntAjax: function(){
+  },
+  setIntAjax: function() {
     var that = this;
-    this.interval = setInterval(function () {
-              that.app.render();
-              //console.log('ok');
-          }, 5000);  
+    this.interval = setInterval(function() {
+      that.app.render();
+    }, 5000);
 
   },
   render: function() {
-   
     var tmpl = _.template(mainTemplate);
     $('.submenu').append(tmpl);
   },
@@ -49,12 +46,12 @@ var CommentView = Backbone.View.extend({
 
   render: function() {
     $.ajax({
-      url: 'http://localhost:8080/api/comments?name=' + this.model.get('name') + '&time=' + this.model.get('time') + '&comment=' + this.model.get('comments')+ '&icon=' +this.model.get('icon'),
+      url: 'http://localhost:8080/api/comments?name=' + this.model.get('name') + '&time=' + this.model.get('time') + '&comment=' + this.model.get('comments') + '&icon=' + this.model.get('icon'),
       type: "POST",
       dataType: 'json',
       crossDomain: true,
       success: function(result) {
-        console.log('yes');
+        
       }
     });
 
@@ -62,9 +59,7 @@ var CommentView = Backbone.View.extend({
 
   },
   initialize: function() {
-
     this.render();
-
   }
 });
 
@@ -78,9 +73,9 @@ var CommentsView = Backbone.View.extend({
   initialize: function() {
     var that = this;
     collection.on('add', this.render, this);
-    
+    this.prev = 0;
     this.render();
-    this.counter = 0;
+    this.counter = this.templ = 1;
     this.array = [];
   },
 
@@ -98,23 +93,25 @@ var CommentsView = Backbone.View.extend({
       success: function(response) {
         var arrayModel = [];
         response.forEach(function(obj) {
-        arrayModel.push(obj)
+          arrayModel.push(obj)
         })
         arrayModel.reverse();
+        that.array = arrayModel.slice(0, that.counter * 10);
 
-        if (that.counter == 0) {
-          that.array = arrayModel.slice(0, 10);
-          collection.reset(that.array)
-        } else {
-          collection.reset(arrayModel)
+        collection.reset(that.array)
+
+        if (response.length != that.prev || that.templ != that.counter) {
+
+          $(that.el).html(that.template({
+            comments: collection.toJSON()
+          }));
+        }
+        if (arrayModel.length <= that.counter * 10) {
+          $(that.el).find('input').hide();
         }
 
-        $(that.el).html(that.template({
-          comments: collection.toJSON()
-        }));
-        if (arrayModel.length < 10 || that.counter != 0) {
-          $(that.el).find('input').addClass('hide');
-        }
+        that.prev = response.length;
+        that.templ = that.counter;
       }
     });
   },
@@ -156,16 +153,8 @@ var FormView = Backbone.View.extend({
 
   addContact: function() {
     var model = new CommentModel();
-    
-
-
     var comments = this.$el.find('textarea');
-
-    //var name = data.name;
-
-    /*if (comments.val() == '' || name.val() == '') {
-      alert('form can`t be empty!')
-    } else {*/
+    if ($(comments).val().match(/[a-zA-Zа-яА-Яії]{3,60}/gi)) {
 
       model.set({
         name: this.username,
@@ -176,31 +165,23 @@ var FormView = Backbone.View.extend({
       var cv = new CommentView({
         model: model
       });
-      //(this.$el.find('form')[0]).reset();
       collection.add(model);
-    },
-    saveData: function() {
-    this.username = $('#name').val();
-    var radios = $('#img').find('input');
-    for (var i = 0, len = radios.length; i < len; i++) {
-      if (radios[i].checked) {
-        var $img = $($(radios[i]).closest('label')).find('img');
-        this.icon = ($img.attr('src'));
-      }
+      $('#comment').val('');
     }
-    $('#commentbox').show();
-    $('#username').hide();
-
   },
-  getData: function() {
-     
-    return {
-      name: this.username,
-      icon: this.icon
+  saveData: function() {
+    this.username = $('#name').val();
+    if ((this.username.match(/[a-zA-Zа-яА-Яії]{3,30}/gi))) {
+      var radios = $('#img').find('input');
+      for (var i = 0, len = radios.length; i < len; i++) {
+        if (radios[i].checked) {
+          var $img = $($(radios[i]).closest('label')).find('img');
+          this.icon = ($img.attr('src'));
+        }
+      }
+      $('#commentbox').show();
+      $('#username').hide();
     }
   }
 
- // },
-
 });
-
