@@ -200,14 +200,27 @@ var SearchView = Backbone.View.extend({
     });
     if (buses.length === 0) {
       info = buses.join(', ');
-      this.$el.find('.info').append('<p>Нажаль, прямого маршруту немає. Спочатку Вам потрібно сісти на ' + busesNotCrossFrom.join(' або ') + ', а потім пересісти на ' + busesNotCrossTo.join(' або ') + '.</p>');
+      this.$el.find('.info').css({
+        'border': '2px solid #fff',
+        'padding': '5px'
+        }).html('На жаль, прямого маршруту немає. Спочатку вам потрібно сісти на ' +
+        busesNotCrossFrom.join(' або ') +
+        ', а потім пересісти на ' +
+        busesNotCrossTo.join(' або ') +
+        '.');
       buses = busesNotCrossFrom.concat(busesNotCrossTo);
     } else {
       info = buses.join(', ');
       if(buses.length > 1){
         infoForBus = 'наступними маршрутами: ';
       };
-      this.$el.find('.info').append('<p>Ви можете доїхати з точки відправлення до точки призначення ' + infoForBus + info + '.</p>');
+      this.$el.find('.info').css({
+        'border': '2px solid #fff',
+        'padding': '5px'
+        }).html('Ви можете доїхати з точки відправлення до точки призначення ' +
+        infoForBus +
+        info +
+        '.');
     };
     buses.forEach(function(routeNumber) {
       menuView.onLineTraffic.drawPoliline(routeNumber);
