@@ -16,6 +16,7 @@ var SearchView = Backbone.View.extend({
     this.fetch('http://localhost:8080/api/routes', that.setBusStopArray);
     this.$el.append(this.template);
     this.autocompleteListener();
+
     this.markers = [];
     this.circles = [];
     this.infowindow = [];
@@ -129,9 +130,11 @@ var SearchView = Backbone.View.extend({
     this.infowindow.forEach(function(el) {
       el.close();
     });
-    this.poliline.forEach(function(el){
-      menuView.onLineTraffic.hidePoliline(el);
-    });
+    if(this.poliline){
+      this.poliline.forEach(function(el){
+        menuView.onLineTraffic.hidePoliline(el);
+      });
+    }
   },
   setInfowindow: function(busStopArray) {
     var that = this,
@@ -201,8 +204,7 @@ var SearchView = Backbone.View.extend({
     if (buses.length === 0) {
       info = buses.join(', ');
       this.$el.find('.info').css({
-        'border': '2px solid #fff',
-        'padding': '5px'
+        'display': 'block'
         }).html('На жаль, прямого маршруту немає. Спочатку вам потрібно сісти на ' +
         busesNotCrossFrom.join(' або ') +
         ', а потім пересісти на ' +
@@ -215,8 +217,7 @@ var SearchView = Backbone.View.extend({
         infoForBus = 'наступними маршрутами: ';
       };
       this.$el.find('.info').css({
-        'border': '2px solid #fff',
-        'padding': '5px'
+        'display': 'block'
         }).html('Ви можете доїхати з точки відправлення до точки призначення ' +
         infoForBus +
         info +
@@ -226,23 +227,19 @@ var SearchView = Backbone.View.extend({
       menuView.onLineTraffic.drawPoliline(routeNumber);
     })
     this.poliline = buses;
+    if(google.maps.geometry.spherical.computeDistanceBetween(this.fieldfrom, this.fieldto) < 500){
+      this.$el.find('.info').append(' До речі, до вашої цілі менше 500 м.')
+    }
   },
-  getPoints: function(event, pointNumber, position) {
-    this.$el.parent().find('.search').addClass('dblclicked');
-    var that = this,
-      amount = pointNumber || 0,
-      busStopsArray = [],
-      map = menuView.getMap();
-    this.setBusStopMarkers();
-    map.setOptions({
-      disableDoubleClickZoom: true
-    });
-    menuView.hidePage();
-    if (pointNumber) {
-      busStopsArray.push(that.getNearestBusStops(position));
-    };
+  clickListener: function(amount, busStopsArray, map){
+    var that = this;
     this.listener = google.maps.event.addListener(map, 'click', function(e) {
       if (menuView.isInLviv(e.latLng)) {
+        if(amount === 0){
+          that.fieldfrom = e.latLng;
+        } else {
+          that.fieldto = e.latLng;
+        };
         amount++;
         busStopsArray.push(that.getNearestBusStops(e.latLng));
         if (amount == 2) {
@@ -260,6 +257,24 @@ var SearchView = Backbone.View.extend({
       }
     });
   },
+  getPoints: function(event, pointNumber, position) {
+    this.$el.parent().find('.search').addClass('dblclicked');
+    var that = this,
+      amount = pointNumber || 0,
+      busStopsArray = [],
+      map = menuView.getMap();
+    this.setBusStopMarkers();
+    map.setOptions({
+      disableDoubleClickZoom: true
+    });
+    menuView.hidePage();
+    if (pointNumber) {
+      this.fieldfrom = position;
+      busStopsArray.push(that.getNearestBusStops(position));
+    };
+    this.clickListener(amount, busStopsArray, map);
+
+  },
   setPoints: function() {
     if (this.fieldfrom && menuView.isInLviv(this.fieldfrom)) {
       if (this.fieldto && menuView.isInLviv(this.fieldto)) {
@@ -275,6 +290,6 @@ var SearchView = Backbone.View.extend({
       }
     } else {
       alert('Перевірте місце відправлення. Можливо, адреса вказана невірно, або знаходиться за межами досяжності наших маршрутів.');
-    }
+    };
   }
 });

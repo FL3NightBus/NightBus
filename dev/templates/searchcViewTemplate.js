@@ -9,7 +9,7 @@ var searchcViewTemplate = '<div class="page searchPage">' +
                                 '<label for="to">до</label>' +
                                 '<input type="text" id="to" name="to" />' +
                               '</div>' +
-                              '<div class="right">' +
+                              '<div class="right center">' +
                                 '<input type="button" id="clear" name="clear" class="btn btn-default" value="очистити" />' +
                                 '<input type="button" id="search" name="search" class="btn btn-default" value="знайти"  />' +
                               '</div>' +

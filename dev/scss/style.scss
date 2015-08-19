@@ -234,7 +234,9 @@ html, body, #map {
 		}
 	}
 	.info {
-		height: 35%;
+		padding: 5px;
+		display: none;
+		border: 2px solid #fff;
 	}
 	.info, .find {
 		text-align: justify;
@@ -438,7 +440,7 @@ and (orientation:landscape) {
 			font-size: 5vh;
 			text-align: left;
 		}
-		input {
+		input[type=button] {
 			width: 15%;
 			height: 7vh;
 			margin-left: 5%;
@@ -544,11 +546,15 @@ and (min-device-width:780px) {
 		-o-transition: width 1s;
 
 		.info {
-			height: 250px;
+			display: none;
+			height: auto;
 		}
-		.infoContainer {
-			margin: 0;
-			padding: 5px;
+		.infoContainer, .info {
+			padding: 10px;
+			font-size: 18px;
+		}
+		input[type=text]{
+			margin-bottom: 10px;
 		}
 		label {
 			display: inline-block;
