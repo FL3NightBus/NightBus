@@ -46,5 +46,5 @@ var commentTemplate = '<div id="chat">' +
         '</div>' +
     '</div>' +
     '<% }) %>' +
-    '<input type="button", value="show all", id="show" class="btn">' +
+    '<input type="button", value="попередні", id="show" class="btn">' +
     '</div>';

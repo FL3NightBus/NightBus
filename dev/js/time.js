@@ -109,7 +109,8 @@ var BusStopView = Backbone.View.extend({
         } else if (max > indexOfBusStop) {
           time = (myroute.length - 1 - (max - indexOfBusStop - 1)) * 5;
         }
-        console.log('time is: ' + time);
+        
+        time = that.formatTime(time);
         that.contentString += "<p>" + el + " : " + time + "</p>";
       } else {
         that.contentString += "<p>" + el + " - " + "</p>";
