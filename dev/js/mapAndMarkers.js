@@ -67,7 +67,7 @@ var OnLineTrafficView = Backbone.View.extend({
     }
     return 90 - angle;
   },
-  listener: function() {
+  listener: function(e) {
     // interval (seconds) - value from #interval to know when send requests (default 5s)
     var interval = ($('#interval').val()) || 3;
     var elBox = $(e.currentTarget);
