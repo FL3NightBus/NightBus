@@ -117,7 +117,7 @@ var MenuView = Backbone.View.extend({
         var infowindow = new google.maps.InfoWindow({
           map: map,
           position: pos,
-          content: 'You are here'
+          content: 'Я тут'
         });
         that.setYourPosition(pos);
         map.setCenter(pos);

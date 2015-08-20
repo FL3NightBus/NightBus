@@ -38,7 +38,7 @@ var onLineTrafficViewTemplate = '<div class="page onLineTrafficPage">' +
       '</div>';
 
 var busInfoTemplate = '<div id="#busInfo">' +
-   '<span id="close"></span>' +
+   '<span id="closeInfo">X</span>' +
       '<p><%= obj.route%></p>' +
       '<p><%= obj.way %></p>' +
       '<p>Ціна: <%= obj.price %></p>' +
