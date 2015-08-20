@@ -432,7 +432,7 @@ var OnLineTrafficView = Backbone.View.extend({
     var obj;
     for (var key in data) {
       if(key == route) {
-        information = data[key]
+       var information = data[key];
       }
     }
     var templ = _.template((busInfoTemplate));

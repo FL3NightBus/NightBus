@@ -242,7 +242,6 @@ html, body, #map {
     .submenu .onLineTrafficPage .polylineInput {
       margin-right: 40%; }
     .submenu .onLineTrafficPage #busInfo {
-      display: none;
       position: absolute;
       top: 0;
       left: 0;
