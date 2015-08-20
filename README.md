@@ -18,6 +18,7 @@ If you want share you experience with your friends or other customers of this se
 
 2. After "registration" one may type any massage he want. When message is ready customer should push "Ok" button to send message to chat. Then all users can read this message and certainly comment it.
 Firstly you can see 10 last messages on the page, but button "Next 10", as you can understand from its name, let you see next 10 messages.
+
 ## Search menu
 Here one can use 3 functions which help to solve any logistic problem.
 
