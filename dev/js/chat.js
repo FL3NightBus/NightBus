@@ -46,7 +46,7 @@ var CommentView = Backbone.View.extend({
 
   render: function() {
     $.ajax({
-      url: 'http://localhost:8080/api/comments?name=' + this.model.get('name') + '&time=' + this.model.get('time') + '&comment=' + this.model.get('comments') + '&icon=' + this.model.get('icon'),
+      url: 'https://nightbus.localtunnel.me/api/comments?name=' + this.model.get('name') + '&time=' + this.model.get('time') + '&comment=' + this.model.get('comments') + '&icon=' + this.model.get('icon'),
       type: "POST",
       dataType: 'json',
       crossDomain: true,
@@ -89,7 +89,7 @@ var CommentsView = Backbone.View.extend({
       type: "GET",
       dataType: 'json',
       async: true,
-      url: 'http://localhost:8080/api/comments/',
+      url: 'https://nightbus.localtunnel.me/api/comments/',
       success: function(response) {
         var arrayModel = [];
         response.forEach(function(obj) {

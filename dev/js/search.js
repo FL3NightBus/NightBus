@@ -13,7 +13,7 @@ var SearchView = Backbone.View.extend({
   listener: null,
   initialize: function() {
     var that = this;
-    this.fetch('http://localhost:8080/api/routes', that.setBusStopArray);
+    this.fetch('https://nightbus.localtunnel.me/api/routes', that.setBusStopArray);
     this.$el.append(this.template);
     this.autocompleteListener();
     this.poliline = [];
