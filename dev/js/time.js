@@ -102,9 +102,9 @@ var BusStopView = Backbone.View.extend({
         var max = that.getMaxOfArray(indexes);
         var time;
         if (max < indexOfBusStop) {
-          time = (indexOfBusStop - max - 1) * 12;
+          time = (indexOfBusStop - max - 1) * 10;
         } else if (max > indexOfBusStop) {
-          time = (myroute.length - 1 - (max - indexOfBusStop - 1)) * 12;
+          time = (myroute.length - 1 - (max - indexOfBusStop - 1)) * 10;
         }
         
         time = that.formatTime(time);
