@@ -146,7 +146,7 @@ html, body, #map {
 	background: $panel;
 	box-shadow: inset 0px 0 5px rgba(44, 44, 44, .0), 1px 2px 20px rgba(0, 0, 0, 0.5);
 
-	.button + .button {
+	.button + .button, .information {
 		border-left: solid 3px $submenu;
 	}
 	.button {
@@ -435,7 +435,7 @@ and (orientation:landscape) {
 			padding: 17%;
 			width: 100%;
 		}
-		.button + .button {
+		.button + .button, .information {
 			border-left: none;
 			border-top: solid 3px $submenu;
 		}
@@ -532,7 +532,7 @@ and (min-device-width:780px) {
 		height: 100%;
 		min-width: 0;
 
-		.button + .button {
+		.button + .button, .information {
 			border-left: none;
 			border-top: solid 3px $submenu;
 		}
