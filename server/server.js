@@ -114,7 +114,7 @@ setInterval(function() {
   for (i in routesCoordinates) {
     routesCoordinates[i]++;
   };
-}, 5000);
+}, 10000);
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
 app.use('/api', router);

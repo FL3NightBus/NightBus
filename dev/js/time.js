@@ -64,8 +64,6 @@ var BusStopView = Backbone.View.extend({
         var busName = mas[1];
         var busNameArray = busName.split(',');
         var myCoordOfStop = marker.getPosition();
-        console.log(that.response);
-        console.log(myCoordOfStop);
         that.contentString = "<h4>" + busStopName + "</h4>";
         that.checkBusName(busNameArray, that.contentString, myCoordOfStop);
         infowindow.setContent(that.contentString);
@@ -81,7 +79,6 @@ var BusStopView = Backbone.View.extend({
       str = time / 60 + ' хв';
     } else if (time > 60 && time % 60 != 0) {
       var min = Math.floor(time / 60);
-      console.log('hour' + min);
       var sec = time - min * 60;
       str = min + 'хв. ' + sec + 'сек';
     }
@@ -105,9 +102,9 @@ var BusStopView = Backbone.View.extend({
         var max = that.getMaxOfArray(indexes);
         var time;
         if (max < indexOfBusStop) {
-          time = (indexOfBusStop - max - 1) * 5;
+          time = (indexOfBusStop - max - 1) * 12;
         } else if (max > indexOfBusStop) {
-          time = (myroute.length - 1 - (max - indexOfBusStop - 1)) * 5;
+          time = (myroute.length - 1 - (max - indexOfBusStop - 1)) * 12;
         }
         
         time = that.formatTime(time);

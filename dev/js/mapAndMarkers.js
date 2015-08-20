@@ -120,8 +120,7 @@ var OnLineTrafficView = Backbone.View.extend({
         callback(response, bus, that);
       },
       error: function(err) {
-        console.log(this.url);
-        console.log(response);
+        console.log(err);
       }
     });
   },
@@ -285,7 +284,6 @@ var OnLineTrafficView = Backbone.View.extend({
 
       success: function(resp) {
         that.putResponse(resp);
-        //console.log(this.response)
       },
       error: function(err) {
         console.log(err);
@@ -298,7 +296,6 @@ var OnLineTrafficView = Backbone.View.extend({
   },
 
   getResponse: function() {
-    console.log('getresp: ' + this.response)
     return this.response;
   },
 
@@ -389,7 +386,6 @@ var OnLineTrafficView = Backbone.View.extend({
         templ = obj.routeArray;
       }
     })
-    console.log(templ);
     return templ.map(function(el) {
       return (new google.maps.LatLng(el.lat, el.lng));
     })
@@ -458,7 +454,6 @@ var OnLineTrafficView = Backbone.View.extend({
         bw: el.info.bw
       };
     });
-    console.log(infoObject);
     return infoObject;
   },
   getInfo: function() {

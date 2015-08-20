@@ -44,7 +44,7 @@ var SearchView = Backbone.View.extend({
   getPosition: function() {
     var myPosition = menuView.getYourPosition();
     if($.isEmptyObject(myPosition)) {
-      alert('Не має даних із геолокації.');
+      alert('Немає даних із геолокації.');
       return;
     };
     if(menuView.isInLviv(myPosition)){
@@ -136,7 +136,6 @@ var SearchView = Backbone.View.extend({
     this.infowindow.forEach(function(el) {
       el.close();
     });
-    console.log(this.poliline);
     if(this.poliline){
       this.poliline.forEach(function(el){
         menuView.onLineTraffic.hidePoliline(el);
