@@ -1,6 +1,6 @@
 var onLineTrafficViewTemplate = '<div class="page onLineTrafficPage">' +
         '<div id="form">' +
-          '<p class="header">Вони їздять</p>' +
+          '<p class="header">Слідкуй</p>' +
           '<input class="busInput" type="checkbox" id="1">' +
           '<input class="busInput" type="checkbox" id="2">' +
           '<input class="busInput" type="checkbox" id="3">' +
@@ -11,7 +11,7 @@ var onLineTrafficViewTemplate = '<div class="page onLineTrafficPage">' +
         '</div>' +
         '<div id="polylines">' +
           '<div id="sp">' +
-            '<p class="header">маршрутами</p>' +
+            '<p class="header">Клікни</p>' +
             '<span class="routeSpan">1H</span>' +
             '<span class="routeSpan">2H</span>' +
             '<span class="routeSpan">3H</span>' +
@@ -21,7 +21,7 @@ var onLineTrafficViewTemplate = '<div class="page onLineTrafficPage">' +
             '<span class="routeSpan">7H</span><br>' +
           '</div>' +
           '<div id="pi">' +
-            '<p class="header">ось цими</p>' +
+            '<p class="header">Дивись</p>' +
             '<input class="polylineInput" id="1H" type="checkbox">' +
             '<input class="polylineInput" id="2H" type="checkbox">' +
             '<input class="polylineInput" id="3H" type="checkbox">' +
@@ -32,7 +32,14 @@ var onLineTrafficViewTemplate = '<div class="page onLineTrafficPage">' +
           '</div>' +
         '</div>' +
         '<div id="ftr">Як часто показувати автобуси ?' +
-            '<input type="number" placeholder="5 сек" id="interval" min="5" max="30" step="5">' +
+        '<select id="interval" name="interval">' +
+          '<option value="10">10</option>' +
+          '<option value="20">20</option>' +
+          '<option value="30">30</option>' +
+          '<option value="40">40</option>' +
+          '<option value="50">50</option>' +
+          '<option value="60">60</option>' +
+          '</select>' 
         '</div>' +
         '<div id="busInfo"></div>' +
       '</div>';

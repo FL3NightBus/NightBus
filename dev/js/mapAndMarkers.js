@@ -233,19 +233,21 @@ var OnLineTrafficView = Backbone.View.extend({
         title: bus + 'H',
         //     label: bus + 'H',
         map: map,
-        icon: vehicle
-      });
+          icon: vehicle
+        });
       // options for infowindow
       options = {
-        map: map,
-        position: location,
         content: bus
       };
 
-      /*infowindow = new google.maps.InfoWindow(options);
-      setTimeout(function () {
+      infowindow = new google.maps.InfoWindow(options);
+      marker.addListener('click', function() {
+        infowindow.open(map, marker);
+        setTimeout(function () {
         infowindow.close()
-      }, 1000);*/
+      }, 1000);
+      });
+
       // and add marker to [Markers]
       that.pushMarkers(bus, marker);
     }
